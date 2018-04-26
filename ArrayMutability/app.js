@@ -10,10 +10,11 @@ let exec1 = function() {
 
     let b = wrongOperation(a);
     console.log("b:");
-    console.log(b); // results [ 3, 4, 7, 8]
+    b[2] = 6; // mutation
+    console.log(b); // results [ 3, 4, 6, 8]
 
     console.log("a:");
-    console.log(a); // results [ 3, 4, 7, 8]
+    console.log(a); // results [ 3, 4, 6, 8]
     console.log("DONE: EXEC 1");
     console.log();
 };
