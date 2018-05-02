@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "@fendy3002/qz-node": "^0.2.17"
+    }
+}
