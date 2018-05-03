@@ -15,7 +15,7 @@ let returnPromise = (value) => {
 let delayExecution = (value) => (resolve, reject) => {
     setTimeout(() => {
         resolve(value + 1);
-    }, 100);
+    }, 200);
 };
 
 let qzNode = require("@fendy3002/qz-node").default();
@@ -27,4 +27,6 @@ for(let i = 0; i < 20; i++){
 }
 qzNode.promise.limit({
     limit: 3
-})(promises);
+})(promises).then((results) => {
+    console.log(results); // consist of arrays from 1 to 20
+});
