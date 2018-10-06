@@ -1,6 +1,9 @@
 {
     "dependencies": {
         "@fendy3002/qz-node": "^0.2.18",
-        "express": "^4.16.3"
+        "express": "^4.16.3",
+        "moment": "^2.22.2",
+        "mysql2": "^1.6.1",
+        "sequelize": "^4.39.0"
     }
 }
