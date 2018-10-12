@@ -1,9 +1,11 @@
 "use strict";
 var service3 = require("./service3");
 var service2 = function (param1) {
-    var resolveService1 = Promise.resolve({ svcName2: "Service dummy" });
+    var innerPromise = function (resolve, reject) {
+        return resolve({ svcName2: "Service dummy" });
+    };
     if (param1 == 1) {
-        return resolveService1;
+        return new Promise(innerPromise);
     }
     else {
         return Promise.resolve(service3);
