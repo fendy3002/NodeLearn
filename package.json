@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@fendy3002/qz-node": "^0.2.18",
+        "@fendy3002/qz-node": "^0.5.9",
         "dotenv": "^6.0.0",
         "express": "^4.16.3",
         "moment": "^2.22.2",
