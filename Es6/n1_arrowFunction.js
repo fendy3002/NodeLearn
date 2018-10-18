@@ -8,6 +8,18 @@ let normalFunction = function(param1) {
     console.log(param1);
 };
 
+// arrow function can return immediately
+let arrowReturn = (param1) => (param1 + 5);
+let arrowReturnJson = (param1) => ({ obj: param1 });
+
+// which is identical to
+let arrowReturnNormal = (param1) => {
+    return (param1 + 5)
+};
+let arrowReturnJsonNormal = (param1) => {
+    return { "obj": param1 };
+};
+
 // then the function below
 let nestedArrowFunction1 = (param1) => (param2) => (param3) => {
     return param1 + param2 + param3;
