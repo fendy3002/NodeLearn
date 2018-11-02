@@ -1,45 +1,3 @@
-// getting data in other language
-let getUser = (id) => {
-    return {
-        "name": "",
-        "address" : ""
-    };
-};
-let getCountry = () => {
-    return [{
-        code: "id",
-        name: "Indonesia"
-    }];
-};
-
-// usage
-let user = getUser(1);
-let countries = getCountry();
-user.country = countries[0];
-console.log("Get user in other language", user);
-
-// getting data in nodejs
-let getUserNode = (id, callback) => {
-    callback({
-        "name": "",
-        "address" : ""
-    });
-};
-let getCountryNode = (callback) => {
-    callback([{
-        code: "id",
-        name: "Indonesia"
-    }])
-};
-
-// usage
-getUserNode(1, (user) => {
-    getCountryNode((countries) => {
-        user.country = countries[0];
-        console.log("user node", user);
-    });
-});
-
 // Using promise to prevent deep nesting
 let getUserPromise = (id) => {
     return new Promise((resolve, reject) => {
@@ -81,7 +39,7 @@ getUserPromise(1)
     console.log("User promise", userWithCountry);
 });
 
-
+/*
 // beware, callback function usually return void, 
 // and returned object from callback
 // cannot be transferred to higher call stack, like below:
@@ -99,4 +57,4 @@ let errorInPromise = new Promise((resolve, reject) => {
 });
 errorInPromise.catch((err) => {
     console.log("Promise can also catch error", err);
-})
+})*/
