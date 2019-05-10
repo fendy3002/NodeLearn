@@ -1,0 +1,58 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Url Learn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div>
+        <button type="button" id="btn">Next</button>
+    </div>
+    <script src="https://unpkg.com/history"></script>
+    <script>
+        window.history.pushState({}, '', "/");
+        const browserHistory = window.History.createBrowserHistory();
+        browserHistory.listen((location, action) => {
+            console.log(location, action);
+            debug("browserHistory.listen");
+        });
+
+        let debug = (cause) => {
+            console.log("DEBUG, cause:", cause);
+            let urlParams = new URLSearchParams(window.location.search);
+            for(let pair of urlParams.entries()){
+                console.log(pair[0], pair[1]);
+            }
+        };
+        let phase = 0;
+        const action = [
+            (evt) => {
+                window.history.pushState({}, '', "/first?foo=bar");
+            },
+            (evt) => {
+                let urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("foo2", "baz");
+                window.history.pushState({}, '', "/first/then?" + urlParams);
+            },
+            (evt) => {
+                let urlParams = new URLSearchParams("");
+                urlParams.set("foo", "baz");
+                window.history.pushState({}, '', "/second/?" + urlParams);
+            },
+            (evt) => {
+                let urlParams = new URLSearchParams(window.location.search);
+                urlParams.set("foo2", "baz");
+                window.history.pushState({}, '', "/second/?" + urlParams);
+            },
+        ];
+        document.getElementById("btn").onclick = (evt) => {
+            if(action[phase]){
+                debug("action");
+                action[phase++](evt);
+            }
+        };
+    </script>
+</body>
+</html>
