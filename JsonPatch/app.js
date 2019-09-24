@@ -24,6 +24,10 @@ let case1Field = async() => {
         "bar": "bar2"
     };
     let compared = jsonpatch.compare(before, after);
+    
+    let applyWithoutModify = jsonpatch.applyPatch(before, compared, true, false);
+    assert.notEqual(before.bar, after.bar);
+    assert.equal(applyWithoutModify.newDocument.bar, after.bar);
     let newBefore = jsonpatch.applyPatch(before, compared);
     assert.equal(newBefore.newDocument.bar, after.bar);
     assert.equal(before.bar, after.bar);
