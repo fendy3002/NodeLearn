@@ -4,6 +4,7 @@ let agent = async () => {
     console.log();
     console.log("agent");
     let agent = sa.agent();
+    agent.set("Content-Type", "form/x-url-encoded");
     agent.set("Content-Type", "application/json");
     agent.set("Authorization", "Bearer 12344567");
 
