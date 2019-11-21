@@ -24,7 +24,8 @@ var schema = {
     "properties": {
         "name": { "type": "string" },
         "address": { "$ref": "/SimpleAddress" },
-        "votes": { "type": ["null", "integer"], "minimum": 1 }
+        "votes": { "type": ["null", "integer"], "minimum": 1 },
+        "age": { "type": "integer" },
     }
 };
 
@@ -36,8 +37,9 @@ var p = {
         "city": "Washington",
         "country": "USA"
     },
-    "votes": null
+    "votes": null,
+    "age": "15"
 };
 
 v.addSchema(addressSchema, '/SimpleAddress');
-console.log(v.validate(p, schema), v.validate(p, schema).valid);
+console.log(v.validate(p, schema, { preValidateProperty: coercionHook }), v.validate(p, schema).valid);
