@@ -19,7 +19,7 @@
     display: flex;
     padding: 0;
 }
-  
+ 
 .phase-container .phase .point {
     margin: 0px;
     height: 18px;
@@ -41,7 +41,8 @@
     margin-left: 16px;
     position: relative;
 }
-.phase-container .phase .point:not(:first-child):before {
+.phase-container .phase .point:not(:first-child):before,
+.phase-container .phase li.parallel ul:first-child .point:first-child:before {
     position: absolute;
     content:"";
     height: 1px;
@@ -55,6 +56,24 @@
 .phase-container .phase li.parallel {
     text-decoration: none;
     list-style: none;
+}
+.phase-container .phase li.parallel ul .point:first-child {
+    margin-left: 16px;
+    position: relative;
+}
+.phase-container .phase li.parallel ul:not(:first-child) {
+    margin-top: 8px;
+}
+.phase-container .phase li.parallel ul:not(:first-child) li.point:first-child:before {
+    position: absolute;
+    content:"";
+    height: 8px;
+    top: -14px;
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: #AAAAAA;
+    left: 7px;
+    width: 16px;
 }
 .phase-container .phase .point.done,
 .phase-container .phase .point.done:not(:first-child):before {
