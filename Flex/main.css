@@ -38,7 +38,7 @@
 }
 
 .phase-container .phase .point:not(:first-child) {
-    margin-left: 16px;
+    margin-left: 60px;
     position: relative;
 }
 .phase-container .phase .point:not(:first-child):before,
@@ -50,15 +50,15 @@
     border-top-width: 4px;
     border-top-style: solid;
     border-top-color: #AAAAAA;
-    left: -22px;
-    width: 16px;
+    left: -66px;
+    width: 60px;
 }
 .phase-container .phase li.parallel {
     text-decoration: none;
     list-style: none;
 }
 .phase-container .phase li.parallel ul .point:first-child {
-    margin-left: 16px;
+    margin-left: 60px;
     position: relative;
 }
 .phase-container .phase li.parallel ul:not(:first-child) {
