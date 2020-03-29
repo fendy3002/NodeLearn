@@ -102,6 +102,19 @@ window.stepProgress.draw = function (option) {
         draw.layerPoint().add(point);
         return point;
     };
+
+    draw.parallel = (pos, type) => {
+        let useStyle = style.point[type];
+        let point = new Konva.RegularPolygon({
+            x: pos.x,
+            y: pos.y,
+            sides: 3,
+            ...useStyle
+        });
+        point.setAttr("ptype", type);
+        draw.layerPoint().add(point);
+        return point;
+    };
     draw.connect = (from, to) => {
         let connectorType = to.getAttr("ptype");
         let linePoints = [];

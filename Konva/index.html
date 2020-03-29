@@ -11,10 +11,56 @@
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
     <script src="./style.js"></script>
     <script src="./draw.js"></script>
+    <script src="./make.js"></script>
     <script>
-        let draw = window.stepProgress.draw({});
-        draw.setStage('container');
-        draw.start({x: 50, y: 100}, "done");
+        let phases = [
+            'REQUIREMENT',
+            'DESIGN',
+            'CREATION',
+            'REVIEW'
+        ];
+        let points = {
+            type: "done",
+            phase: 0,
+            next: {
+                type: "done",
+                phase: 0,
+                next: {
+                    type: "done",
+                    pointType: "parallel",
+                    phase: 1,
+                    items: [
+                        {
+                            type: "done",
+                            phase: 1
+                        },
+                        {
+                            type: "done",
+                            phase: 1,
+                            next: {
+                                type: "pending",
+                                phase: 2
+                            }
+                        },
+                        {
+                            type: "pending",
+                            phase: 1
+                        }
+                    ],
+                    next: {
+                        type: "pending",
+                        phase: 3
+                    }
+                }
+            }
+        };
+
+
+        let make = window.stepProgress.make("container", {
+            phase: phases
+        });
+        make.render(points);
+        let draw = make.draw;
         let a = draw.point({ x: 200, y: 100 }, "done");
         let b = draw.point({ x: 350, y: 100 }, "done");
         let c = draw.point({ x: 500, y: 130 }, "pending");
