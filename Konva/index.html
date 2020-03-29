@@ -13,7 +13,7 @@
         let style = {};
         style.point = {
             base: {
-                radius: 13,
+                radius: 12,
                 fill: '#FFFFFF',
                 stroke: '#AAAAAA',
                 strokeWidth: 6
@@ -50,6 +50,7 @@
         style.point.terminatedHover = {
             stroke: '#f8bcaf'
         };
+        
         style.hConnector = {
             base: {
                 strokeWidth: 4,
@@ -72,6 +73,13 @@
             stroke: '#EF5839'
         };
 
+        style.phase = {
+            base: {
+                fill: "#FFFFFF",
+                
+            }
+        };
+
         let make = {};
         make.layer = (layer = null) => {
             if (layer) {
@@ -90,11 +98,13 @@
                 ...useStyle
             });
             point.setAttr("ptype", type);
-            point.on("mouseover", (evt) => {
+            point.on("mouseenter", (evt) => {
+                stage.container().style.cursor = 'pointer';
                 point.stroke(useHoverStyle.stroke);
                 layer.draw();
             });
             point.on("mouseout", (evt) => {
+                stage.container().style.cursor = 'default';
                 point.stroke(useStyle.stroke);
                 layer.draw();
             });
@@ -120,7 +130,7 @@
                 ...style.hConnector[connectorType]
             });
             make.layer().add(connector);
-            connector.zIndex(1);
+            connector.zIndex(0);
             return connector;
         };
     </script>
@@ -128,15 +138,16 @@
         let stageWidth = 1000;
         let stageHeight = 300;
         // first we need to create a stage
-        var stage = new Konva.Stage({
+        let stage = new Konva.Stage({
             container: 'container',   // id of container <div>
             width: stageWidth,
             height: stageHeight
         });
         // then create layer
-        var layer = new Konva.Layer();
+        let layer = new Konva.Layer();
+        let bgLayer = new Konva.Layer();
         make.layer(layer);
-        var stageRect = new Konva.Rect({
+        let bgRect = new Konva.Rect({
             x: 0,
             y: 0,
             width: stageWidth,
@@ -144,14 +155,14 @@
             fill: "#DDDDDD",
             listening: true  // listen for clicks on the stage rectangle
         });
-        layer.add(stageRect);
-        stageRect.zIndex(0);
+        bgLayer.add(bgRect);
         let a = make.point({ x: 50, y: 100 }, "done");
         let b = make.point({ x: 150, y: 100 }, "done");
         let c = make.point({ x: 250, y: 130 }, "pending");
         make.connect(a, b);
         make.connect(b, c);
         // add the layer to the stage
+        stage.add(bgLayer);
         stage.add(layer);
 
         // draw the image
