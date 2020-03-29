@@ -38,7 +38,7 @@
                             type: "done",
                             phase: 1,
                             next: {
-                                type: "pending",
+                                type: "active",
                                 phase: 2,
                                 next: {
                                     type: "pending",
@@ -47,7 +47,7 @@
                             }
                         },
                         {
-                            type: "pending",
+                            type: "active",
                             phase: 1,
                             next: {
                                 type: "pending",
@@ -70,12 +70,12 @@
                             }
                         },
                         {
-                            type: "pending",
+                            type: "done",
                             pointType: "parallel",
                             phase: 1,
                             items: [
                                 {
-                                    type: "pending",
+                                    type: "active",
                                     phase: 1,
                                 },
                                 {

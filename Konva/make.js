@@ -63,7 +63,7 @@ window.stepProgress.make = function (containerId, option) {
             x = x + phase.width + make.option.phaseSpace;
         }
     };
-    make.preRender = (point, prev) => {
+    make.generateShadowPoint = (point, prev) => {
         let shadowPoint = {};
         shadowPoint.type = point.type;
         shadowPoint.pointType = point.pointType;
@@ -74,7 +74,7 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.height = make.option.vSpace;
             // case for last step in parallel
             if (point.next) {
-                shadowPoint.next = make.preRender(point.next, shadowPoint);
+                shadowPoint.next = make.generateShadowPoint(point.next, shadowPoint);
                 shadowPoint.height = Math.max(shadowPoint.height, shadowPoint.next.height);
             }
             else {
@@ -98,7 +98,7 @@ window.stepProgress.make = function (containerId, option) {
                 let pointItem = point.items[i];
                 let shadowItem = {};
                 if (pointItem.pointType == "parallel") {
-                    shadowItem = make.preRender(pointItem, {
+                    shadowItem = make.generateShadowPoint(pointItem, {
                         ...shadowPoint,
                         y: shadowPoint.y + shadowPoint.height
                     });
@@ -119,7 +119,7 @@ window.stepProgress.make = function (containerId, option) {
                 maxPhase = Math.max(maxPhase, shadowItem.phase.index);
                 maxX = Math.max(maxX, shadowItem.x);
                 if (pointItem.next) {
-                    shadowItem.next = make.preRender(pointItem.next, shadowItem);
+                    shadowItem.next = make.generateShadowPoint(pointItem.next, shadowItem);
                     let _next = shadowItem.next;
                     shadowPoint.height = Math.max(shadowPoint.height, _next.height);
                     while (_next.next) {
@@ -147,7 +147,7 @@ window.stepProgress.make = function (containerId, option) {
             shadowParallelEnd.type = hasPending ? "pending" : "done";
             shadowParallelEnd.phase = phaseContext[maxPhase];
             if (point.next) {
-                shadowParallelEnd.next = make.preRender(point.next, shadowParallelEnd);
+                shadowParallelEnd.next = make.generateShadowPoint(point.next, shadowParallelEnd);
             }
             shadowPoint.height += make.option.vSpace;
         }
@@ -232,8 +232,16 @@ window.stepProgress.make = function (containerId, option) {
             draw.phase(phase.startX, phase.width, phase.text);
         }
     };
+
+    make.generateVirtualPositionEach = (point, prevPoint) => {
+
+    };
+    make.generateVirtualPosition = (point) => {
+
+    };
+
     make.render = (point) => {
-        let shadowPoint = make.preRender(point, {
+        let shadowPoint = make.generateShadowPoint(point, {
             x: make.option.paddingX + make.option.startX,
             y: make.option.paddingY + 80,
             type: "done",
