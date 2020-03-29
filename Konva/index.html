@@ -10,9 +10,9 @@
     </div>
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
     <script src="./style.js"></script>
-    <script src="./make.js"></script>
+    <script src="./draw.js"></script>
     <script>
-        let make = window.stepProgress.make({});
+        let draw = window.stepProgress.draw({});
         let stageWidth = 1000;
         let stageHeight = 300;
         // first we need to create a stage
@@ -21,16 +21,16 @@
             width: stageWidth,
             height: stageHeight
         });
-        make.stage(stage);
-        make.start("done");
-        let a = make.point({ x: 200, y: 100 }, "done");
-        let b = make.point({ x: 350, y: 100 }, "done");
-        let c = make.point({ x: 500, y: 130 }, "pending");
+        draw.stage(stage);
+        draw.start("done");
+        let a = draw.point({ x: 200, y: 100 }, "done");
+        let b = draw.point({ x: 350, y: 100 }, "done");
+        let c = draw.point({ x: 500, y: 130 }, "pending");
 
-        make.connect(a, b);
-        make.connect(b, c);
-        let phase = make.phase(150, 550, "PHASE1");
-        make.draw();
+        draw.connect(a, b);
+        draw.connect(b, c);
+        let phase = draw.phase(150, 550, "PHASE1");
+        draw.draw();
     </script>
 </body>
 

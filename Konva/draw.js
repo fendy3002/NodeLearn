@@ -1,9 +1,9 @@
 window.stepProgress = window.stepProgress || {};
-window.stepProgress.make = window.stepProgress.make || {};
+window.stepProgress.draw = window.stepProgress.draw || {};
 
-window.stepProgress.make = function (option) {
+window.stepProgress.draw = function (option) {
     let style = window.stepProgress.style;
-    let make = {
+    let draw = {
         option: {
             space: 300,
             paddingX: 20,
@@ -20,16 +20,16 @@ window.stepProgress.make = function (option) {
             }
         }
     };
-    make.stage = (stage = null) => {
+    draw.stage = (stage = null) => {
         if (stage) {
-            make.__.stage = stage;
-            make.__.layer = {
+            draw.__.stage = stage;
+            draw.__.layer = {
                 bg: new Konva.Layer(),
                 phase: new Konva.Layer(),
                 point: new Konva.Layer(),
             };
-            for (let key of Object.keys(make.__.layer)) {
-                make.__.stage.add(make.__.layer[key]);
+            for (let key of Object.keys(draw.__.layer)) {
+                draw.__.stage.add(draw.__.layer[key]);
             }
             let bgRect = new Konva.Rect({
                 x: 0,
@@ -39,45 +39,45 @@ window.stepProgress.make = function (option) {
                 fill: "#DDDDDD",
                 listening: true  // listen for clicks on the stage rectangle
             });
-            make.__.layer.bg.add(bgRect);
+            draw.__.layer.bg.add(bgRect);
         }
         else {
-            return make.__.stage;
+            return draw.__.stage;
         }
     };
-    make.layerPoint = (layer = null) => {
-        return make.__.layer.point;
+    draw.layerPoint = (layer = null) => {
+        return draw.__.layer.point;
     };
-    make.layerPhase = (layer = null) => {
-        return make.__.layer.phase;
+    draw.layerPhase = (layer = null) => {
+        return draw.__.layer.phase;
     };
-    make.draw = () => {
-        for (let key of Object.keys(make.__.layer)) {
-            make.__.layer[key].draw();
+    draw.draw = () => {
+        for (let key of Object.keys(draw.__.layer)) {
+            draw.__.layer[key].draw();
         }
     };
-    make.start = (type) => {
+    draw.start = (pos, type) => {
         let useStyle = style.point[type];
         let point = new Konva.Circle({
-            x: make.option.paddingX + make.option.startX,
-            y: make.option.paddingY + 80,
+            x: pos.x, // draw.option.paddingX + draw.option.startX
+            y: pos.y, // draw.option.paddingY + 80
             radius: 10,
             fill: useStyle.stroke
         });
-        make.layerPoint().add(point);
+        draw.layerPoint().add(point);
         return point;
     };
-    make.end = (pos) => {
+    draw.end = (pos) => {
         let point = new Konva.Circle({
             x: pos.x,
             y: pos.y,
             radius: 12,
             fill: "#4BC9F6"
         });
-        make.layerPoint().add(point);
+        draw.layerPoint().add(point);
         return point;
     };
-    make.point = (pos, type) => {
+    draw.point = (pos, type) => {
         let useStyle = style.point[type];
         let useHoverStyle = style.point[type + "Hover"];
         let point = new Konva.Circle({
@@ -89,17 +89,17 @@ window.stepProgress.make = function (option) {
         point.on("mouseenter", (evt) => {
             stage.container().style.cursor = 'pointer';
             point.stroke(useHoverStyle.stroke);
-            make.layerPoint().draw();
+            draw.layerPoint().draw();
         });
         point.on("mouseout", (evt) => {
             stage.container().style.cursor = 'default';
             point.stroke(useStyle.stroke);
-            make.layerPoint().draw();
+            draw.layerPoint().draw();
         });
-        make.layerPoint().add(point);
+        draw.layerPoint().add(point);
         return point;
     };
-    make.connect = (from, to) => {
+    draw.connect = (from, to) => {
         let connectorType = to.getAttr("ptype");
         let linePoints = [];
         if (to.y() - from.y() == 0) {
@@ -117,16 +117,16 @@ window.stepProgress.make = function (option) {
             points: linePoints,
             ...style.hConnector[connectorType]
         });
-        make.layerPoint().add(connector);
+        draw.layerPoint().add(connector);
         connector.zIndex(0);
         return connector;
     };
-    make.phase = (fromX, toX, text) => {
-        let phaseHeight = make.stage().height() - (2 * make.option.paddingY);
+    draw.phase = (fromX, toX, text) => {
+        let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY);
         let phaseWidth = toX - fromX;
         let phase = new Konva.Rect({
             x: fromX,
-            y: make.option.paddingY,
+            y: draw.option.paddingY,
             width: phaseWidth,
             height: phaseHeight,
             cornerRadius: 10,
@@ -134,7 +134,7 @@ window.stepProgress.make = function (option) {
         });
         let textShape = new Konva.Text({
             x: fromX,
-            y: make.option.paddingY + 14,
+            y: draw.option.paddingY + 14,
             width: phaseWidth,
             text: text,
             fontSize: 24,
@@ -142,9 +142,9 @@ window.stepProgress.make = function (option) {
             align: 'center'
         });
 
-        make.layerPhase().add(phase);
-        make.layerPhase().add(textShape);
+        draw.layerPhase().add(phase);
+        draw.layerPhase().add(textShape);
     };
 
-    return make;
+    return draw;
 };
