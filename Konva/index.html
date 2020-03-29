@@ -50,7 +50,7 @@
         style.point.terminatedHover = {
             stroke: '#f8bcaf'
         };
-        
+
         style.hConnector = {
             base: {
                 strokeWidth: 4,
@@ -76,17 +76,45 @@
         style.phase = {
             base: {
                 fill: "#FFFFFF",
-                
+
             }
         };
 
         let make = {};
-        make.layer = (layer = null) => {
-            if (layer) {
-                make.__layer = layer;
+        make.stage = (stage = null) => {
+            if (stage) {
+                make.__stage = stage;
+                make.__layer = {
+                    bg: new Konva.Layer(),
+                    phase: new Konva.Layer(),
+                    point: new Konva.Layer(),
+                };
+                for (let key of Object.keys(make.__layer)) {
+                    make.__stage.add(make.__layer[key]);
+                }
+                let bgRect = new Konva.Rect({
+                    x: 0,
+                    y: 0,
+                    width: stage.width(),
+                    height: stage.height(),
+                    fill: "#DDDDDD",
+                    listening: true  // listen for clicks on the stage rectangle
+                });
+                make.__layer.bg.add(bgRect);
             }
             else {
-                return make.__layer;
+                return make.__stage;
+            }
+        };
+        make.layerPoint = (layer = null) => {
+            return make.__layer.point;
+        };
+        make.layerPhase = (layer = null) => {
+            return make.__layer.phase;
+        };
+        make.draw = () => {
+            for (let key of Object.keys(make.__layer)) {
+                make.__layer[key].draw();
             }
         }
         make.point = (pos, type) => {
@@ -101,14 +129,14 @@
             point.on("mouseenter", (evt) => {
                 stage.container().style.cursor = 'pointer';
                 point.stroke(useHoverStyle.stroke);
-                layer.draw();
+                make.layerPoint().draw();
             });
             point.on("mouseout", (evt) => {
                 stage.container().style.cursor = 'default';
                 point.stroke(useStyle.stroke);
-                layer.draw();
+                make.layerPoint().draw();
             });
-            make.layer().add(point);
+            make.layerPoint().add(point);
             return point;
         };
         make.connect = (from, to) => {
@@ -119,9 +147,9 @@
             }
             else {
                 linePoints = [
-                    to.x(), to.y(), 
-                    to.x() - 50, to.y(), 
-                    to.x() - 50, from.y(), 
+                    to.x(), to.y(),
+                    to.x() - 50, to.y(),
+                    to.x() - 50, from.y(),
                     from.x(), from.y()
                 ];
             }
@@ -129,7 +157,7 @@
                 points: linePoints,
                 ...style.hConnector[connectorType]
             });
-            make.layer().add(connector);
+            make.layerPoint().add(connector);
             connector.zIndex(0);
             return connector;
         };
@@ -143,30 +171,13 @@
             width: stageWidth,
             height: stageHeight
         });
-        // then create layer
-        let layer = new Konva.Layer();
-        let bgLayer = new Konva.Layer();
-        make.layer(layer);
-        let bgRect = new Konva.Rect({
-            x: 0,
-            y: 0,
-            width: stageWidth,
-            height: stageHeight,
-            fill: "#DDDDDD",
-            listening: true  // listen for clicks on the stage rectangle
-        });
-        bgLayer.add(bgRect);
+        make.stage(stage);
         let a = make.point({ x: 50, y: 100 }, "done");
         let b = make.point({ x: 150, y: 100 }, "done");
         let c = make.point({ x: 250, y: 130 }, "pending");
         make.connect(a, b);
         make.connect(b, c);
-        // add the layer to the stage
-        stage.add(bgLayer);
-        stage.add(layer);
-
-        // draw the image
-        layer.draw();
+        make.draw();
     </script>
 </body>
 
