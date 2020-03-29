@@ -331,13 +331,16 @@ window.stepProgress.make = function (containerId, option) {
 
         let lastX = 0;
         let longestId = "";
+
+        let stageRight = 0;
+        let stageHeight = 0;
         for (let pointId of Object.keys(pointMap)) {
             lastX = Math.max(lastX, pointMap[pointId].x);
             if (pointId.length > longestId.length) {
                 longestId = pointId;
             }
+            stageHeight = Math.max(stageHeight, pointMap[pointId].y);
         }
-        let stageRight = 0;
         for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
             stageRight = Math.max(stageRight, phase.startX + phase.width);
@@ -345,7 +348,8 @@ window.stepProgress.make = function (containerId, option) {
         stageRight += make.option.startX + startX + make.option.paddingX;
 
         draw.setStage(containerId, {
-            width: stageRight
+            width: stageRight,
+            height: stageHeight + (2 * make.option.paddingY) + make.option.phasePaddingX
         });
         make.renderShadowPoint(pointRelation);
         make.renderPhase();
