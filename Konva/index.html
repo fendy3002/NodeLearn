@@ -96,6 +96,16 @@
                 }
             }
         };
+        let pointHelper = (point) => {
+            return {
+                nextPhase: () => {
+                    
+                },
+                nextPoint: () => {
+
+                }
+            };
+        };
         make.stage = (stage = null) => {
             if (stage) {
                 make.__.stage = stage;
@@ -131,12 +141,12 @@
             for (let key of Object.keys(make.__.layer)) {
                 make.__.layer[key].draw();
             }
-        }
-        make.start = (pos, type) => {
+        };
+        make.start = (type) => {
             let useStyle = style.point[type];
             let point = new Konva.Circle({
-                x: pos.x,
-                y: pos.y,
+                x: make.option.paddingX + make.option.startX,
+                y: make.option.paddingY + 80,
                 radius: 10,
                 fill: useStyle.stroke
             });
@@ -212,7 +222,7 @@
             height: stageHeight
         });
         make.stage(stage);
-        make.start({ x: 20, y: 100 }, "done");
+        make.start("done");
         let a = make.point({ x: 50, y: 100 }, "done");
         let b = make.point({ x: 150, y: 100 }, "done");
         let c = make.point({ x: 250, y: 130 }, "pending");
