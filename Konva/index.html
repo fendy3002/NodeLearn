@@ -80,17 +80,32 @@
             }
         };
 
-        let make = {};
+        let make = {
+            option: {
+                space: 300,
+                paddingX: 20,
+                paddingY: 20,
+                startX: 50,
+            },
+            __: {
+                stage: null,
+                layer: {
+                    bg: null,
+                    phase: null,
+                    point: null,
+                }
+            }
+        };
         make.stage = (stage = null) => {
             if (stage) {
-                make.__stage = stage;
-                make.__layer = {
+                make.__.stage = stage;
+                make.__.layer = {
                     bg: new Konva.Layer(),
                     phase: new Konva.Layer(),
                     point: new Konva.Layer(),
                 };
-                for (let key of Object.keys(make.__layer)) {
-                    make.__stage.add(make.__layer[key]);
+                for (let key of Object.keys(make.__.layer)) {
+                    make.__.stage.add(make.__.layer[key]);
                 }
                 let bgRect = new Konva.Rect({
                     x: 0,
@@ -100,23 +115,44 @@
                     fill: "#DDDDDD",
                     listening: true  // listen for clicks on the stage rectangle
                 });
-                make.__layer.bg.add(bgRect);
+                make.__.layer.bg.add(bgRect);
             }
             else {
-                return make.__stage;
+                return make.__.stage;
             }
         };
         make.layerPoint = (layer = null) => {
-            return make.__layer.point;
+            return make.__.layer.point;
         };
         make.layerPhase = (layer = null) => {
-            return make.__layer.phase;
+            return make.__.layer.phase;
         };
         make.draw = () => {
-            for (let key of Object.keys(make.__layer)) {
-                make.__layer[key].draw();
+            for (let key of Object.keys(make.__.layer)) {
+                make.__.layer[key].draw();
             }
         }
+        make.start = (pos, type) => {
+            let useStyle = style.point[type];
+            let point = new Konva.Circle({
+                x: pos.x,
+                y: pos.y,
+                radius: 10,
+                fill: useStyle.stroke
+            });
+            make.layerPoint().add(point);
+            return point;
+        };
+        make.end = (pos) => {
+            let point = new Konva.Circle({
+                x: pos.x,
+                y: pos.y,
+                radius: 12,
+                fill: "#4BC9F6"
+            });
+            make.layerPoint().add(point);
+            return point;
+        };
         make.point = (pos, type) => {
             let useStyle = style.point[type];
             let useHoverStyle = style.point[type + "Hover"];
@@ -161,6 +197,10 @@
             connector.zIndex(0);
             return connector;
         };
+        make.phase = (fromPoint, toPoint, text) => {
+            let phaseHeight = make.stage().height();
+            
+        };
     </script>
     <script>
         let stageWidth = 1000;
@@ -172,6 +212,7 @@
             height: stageHeight
         });
         make.stage(stage);
+        make.start({ x: 20, y: 100 }, "done");
         let a = make.point({ x: 50, y: 100 }, "done");
         let b = make.point({ x: 150, y: 100 }, "done");
         let c = make.point({ x: 250, y: 130 }, "pending");
