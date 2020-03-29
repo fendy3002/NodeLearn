@@ -408,7 +408,7 @@ window.stepProgress.make = function (containerId, option) {
             let phase = phaseContext[phaseIndex]
             let phaseStartX = startX + (phase.minX * make.option.pointSpace);
             draw.phase(phaseStartX,
-                startX + (phase.maxX * make.option.pointSpace) - phaseStartX,
+                startX + (phase.maxX * make.option.pointSpace) - phaseStartX + (2 * make.option.phasePaddingX),
                 phase.text);
         }
     };
