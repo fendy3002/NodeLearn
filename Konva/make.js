@@ -4,7 +4,7 @@ window.stepProgress.make = window.stepProgress.make || {};
 window.stepProgress.make = function (containerId, option) {
     let make = {
         option: {
-            space: 300,
+            space: 100,
             vSpace: 80,
             stageHeight: 300,
             stageWidth: 1000,
@@ -13,6 +13,9 @@ window.stepProgress.make = function (containerId, option) {
             startX: 50,
             phase: [],
             ...option
+        },
+        __: {
+            start: null
         }
     };
     let draw = window.stepProgress.draw(make.option);
@@ -40,7 +43,13 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.phase = phaseContext[point.phase];
             shadowPoint.x = prev.x + make.option.space;
             shadowPoint.y = prev.y;
-            shadowPoint.next = make.preRender(point.next, shadowPoint);
+            // case for last step in parallel
+            if (point.next) {
+                shadowPoint.next = make.preRender(point.next, shadowPoint);
+            }
+            else {
+                shadowPoint.next = null;
+            }
         }
         else {
             shadowPoint.type = point.type;
@@ -49,9 +58,11 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.x = prev.x + make.option.space;
             shadowPoint.y = prev.y;
             let shadowParallelEnd = {
-                y: shadowPoint.y
+                y: shadowPoint.y,
+                prevs: []
             };
             shadowParallelEnd.pointType = "parallel_end";
+            shadowPoint.next = shadowParallelEnd;
             shadowPoint.items = [];
             let maxX = 0;
             let maxPhase = 0;
@@ -63,6 +74,7 @@ window.stepProgress.make = function (containerId, option) {
                 shadowItem.phase = phaseContext[pointItem.phase];
                 shadowItem.x = shadowPoint.x + make.option.space;
                 shadowItem.y = shadowPoint.y + (i * make.option.vSpace);
+                shadowItem.prev = shadowPoint;
                 if (shadowItem.type == "active" || shadowItem.type == "pending") {
                     hasPending = true;
                 }
@@ -83,10 +95,10 @@ window.stepProgress.make = function (containerId, option) {
                     }
                     maxX = Math.max(maxX, _next.x);
                     maxPhase = Math.max(maxPhase, _next.phase.index);
-                    _next.next = shadowParallelEnd;
+                    shadowParallelEnd.prevs.push(_next);
                 }
                 else {
-                    shadowItem.next = shadowParallelEnd;
+                    shadowParallelEnd.prevs.push(shadowItem);
                 }
                 shadowPoint.items.push(shadowItem);
             }
@@ -99,13 +111,84 @@ window.stepProgress.make = function (containerId, option) {
 
         return shadowPoint;
     };
+    make.renderShadowPoint = (shadowPoint, prevPoint) => {
+        if (shadowPoint.prev && shadowPoint.prev.pointType == "start") {
+            let startPoint = draw.start({
+                x: shadowPoint.prev.x,
+                y: shadowPoint.prev.y
+            }, shadowPoint.prev.type);
+            make.__.start = startPoint;
+        }
+        let point = null;
+        if (shadowPoint.pointType != "parallel" && shadowPoint.pointType != "parallel_end") {
+            point = draw.point({
+                x: shadowPoint.x,
+                y: shadowPoint.y
+            }, shadowPoint.type);
+            if (shadowPoint.prev.pointType == "start") {
+                draw.connect(make.__.start, point);
+                make.__.start.next = point;
+                point.prev = make.__.start;
+            }
+            else {
+                draw.connect(prevPoint, point);
+                prevPoint.next = point;
+                point.prev = prevPoint;
+            }
+            if (shadowPoint.next) {
+                make.renderShadowPoint(shadowPoint.next, point);
+            }
+        }
+        else if (shadowPoint.pointType == "parallel") {
+            point = draw.parallel({
+                x: shadowPoint.x,
+                y: shadowPoint.y
+            }, shadowPoint.type);
+            point.nexts = [];
+
+            if (shadowPoint.prev.pointType == "start") {
+                draw.connect(make.__.start, point);
+                make.__.start.next = point;
+                point.prev = make.__.start;
+            }
+            else {
+                draw.connect(prevPoint, point);
+                prevPoint.next = point;
+                point.prev = prevPoint;
+            }
+            for (let i = 0; i < shadowPoint.items.length; i++) {
+                point.nexts.push(make.renderShadowPoint(shadowPoint.items[i], point));
+            }
+            if (shadowPoint.next) {
+                make.renderShadowPoint(shadowPoint.next, point);
+            }
+        }
+        else if (shadowPoint.pointType == "parallel_end") {
+            point = draw.parallel({
+                x: shadowPoint.x,
+                y: shadowPoint.y
+            }, shadowPoint.type);
+            console.log(prevPoint.nexts);
+            for (let each of prevPoint.nexts) {
+                console.log(each);
+                let last = each;
+                while (last.next) {
+                    last = last.next;
+                }
+                draw.connect(last, point);
+            }
+        }
+    };
     make.render = (point) => {
         let shadowPoint = make.preRender(point, {
             x: startPoint.x(),
             y: make.option.paddingY + 80,
-            type: "start",
+            type: "done",
+            pointType: "start",
             phase: null
         });
+        make.renderShadowPoint(shadowPoint);
+        draw.draw();
     };
 
     return make;
