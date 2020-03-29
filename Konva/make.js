@@ -37,6 +37,9 @@ window.stepProgress.make = function (containerId, option) {
         };
     }
     make.preRender = (point, prev) => {
+        if (!point) {
+            console.log(prev);
+        }
         let shadowPoint = {};
         if (point.pointType != "parallel") {
             shadowPoint.type = point.type;
@@ -105,7 +108,7 @@ window.stepProgress.make = function (containerId, option) {
             shadowParallelEnd.x = maxX + make.option.space;
             shadowParallelEnd.type = hasPending ? "pending" : "done";
             shadowParallelEnd.phase = phaseContext[maxPhase];
-            shadowParallelEnd.next = make.preRender(point.next, shadowPoint, shadowParallelEnd);
+            shadowParallelEnd.next = make.preRender(point.next, shadowParallelEnd);
         }
         shadowPoint.prev = prev;
 
@@ -168,16 +171,18 @@ window.stepProgress.make = function (containerId, option) {
                 x: shadowPoint.x,
                 y: shadowPoint.y
             }, shadowPoint.type);
-            console.log(prevPoint.nexts);
             for (let each of prevPoint.nexts) {
-                console.log(each);
                 let last = each;
                 while (last.next) {
                     last = last.next;
                 }
                 draw.connect(last, point);
             }
+            if (shadowPoint.next) {
+                make.renderShadowPoint(shadowPoint.next, point);
+            }
         }
+        return point;
     };
     make.render = (point) => {
         let shadowPoint = make.preRender(point, {
