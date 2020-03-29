@@ -11,16 +11,16 @@
     align-items: center;
 }
 
-.phase-container .phase {
+/*.phase-container {
     background-color: white;
-}
+}*/
 
-.phase-container .phase ul {
+.phase-container ul {
     display: flex;
     padding: 0;
 }
  
-.phase-container .phase .point {
+.phase-container .point {
     margin: 0px;
     height: 18px;
     width: 18px;
@@ -32,17 +32,17 @@
     display: inline-block;
     cursor: pointer;
 }
-.phase-container .phase .point:hover {
+.phase-container .point:hover {
     background-color: #DFDFDF;
     border-color: #BABABA;
 }
 
-.phase-container .phase .point:not(:first-child) {
+.phase-container .point:not(:first-child) {
     margin-left: 60px;
     position: relative;
 }
-.phase-container .phase .point:not(:first-child):before,
-.phase-container .phase li.parallel ul:first-child .point:first-child:before {
+.phase-container .point:not(:first-child):before,
+.phase-container li.parallel ul:first-child .point:first-child:before {
     position: absolute;
     content:"";
     height: 1px;
@@ -53,18 +53,18 @@
     left: -66px;
     width: 60px;
 }
-.phase-container .phase li.parallel {
+.phase-container li.parallel {
     text-decoration: none;
     list-style: none;
 }
-.phase-container .phase li.parallel ul .point:first-child {
+.phase-container li.parallel ul .point:first-child {
     margin-left: 60px;
     position: relative;
 }
-.phase-container .phase li.parallel ul:not(:first-child) {
+.phase-container li.parallel ul:not(:first-child) {
     margin-top: 8px;
 }
-.phase-container .phase li.parallel ul:not(:first-child) li.point:first-child:before {
+.phase-container li.parallel ul:not(:first-child) li.point:first-child:before {
     position: absolute;
     content:"";
     height: 8px;
@@ -75,27 +75,27 @@
     left: 7px;
     width: 16px;
 }
-.phase-container .phase .point.done,
-.phase-container .phase .point.done:not(:first-child):before {
+.phase-container .point.done,
+.phase-container .point.done:not(:first-child):before {
     border-color: #4BC9F6;
 }
-.phase-container .phase .point.done:hover{
+.phase-container .point.done:hover{
     background-color: #FFFFFF;
     border-color: #b7e9fb;
 }
-.phase-container .phase .point.active,
-.phase-container .phase .point.active:not(:first-child):before {
+.phase-container .point.active,
+.phase-container .point.active:not(:first-child):before {
     border-color: #56B64C;
 }
-.phase-container .phase .point.active:hover{
+.phase-container .point.active:hover{
     background-color: #FFFFFF;
     border-color: #bbe1b7;
 }
-.phase-container .phase .point.terminated,
-.phase-container .phase .point.terminated:not(:first-child):before {
+.phase-container .point.terminated,
+.phase-container .point.terminated:not(:first-child):before {
     border-color: #EF5839;
 }
-.phase-container .phase .point.terminated:hover{
+.phase-container .point.terminated:hover{
     background-color: #FFFFFF;
     border-color: #f8bcaf;
 }
