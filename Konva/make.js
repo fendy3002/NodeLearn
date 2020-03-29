@@ -7,7 +7,7 @@ window.stepProgress.make = function (containerId, option) {
             space: 100,
             vSpace: 50,
             stageHeight: 300,
-            stageWidth: 1000,
+            stageWidth: 5000,
             paddingX: 20,
             paddingY: 10,
             startX: 50,
@@ -175,7 +175,7 @@ window.stepProgress.make = function (containerId, option) {
                 point.nexts.push(make.renderShadowPoint(shadowPoint.items[i], point));
             }
             if (shadowPoint.next) {
-                make.renderShadowPoint(shadowPoint.next, point);
+                point.next = make.renderShadowPoint(shadowPoint.next, point);
             }
         }
         else if (shadowPoint.pointType == "parallel_end") {
@@ -184,8 +184,8 @@ window.stepProgress.make = function (containerId, option) {
                 y: shadowPoint.y
             }, shadowPoint.type);
             if (prevPoint.nexts) {
+                console.log(prevPoint.nexts);
                 for (let each of prevPoint.nexts) {
-                    console.log(each);
                     let last = each;
                     while (last.next) {
                         last = last.next;
