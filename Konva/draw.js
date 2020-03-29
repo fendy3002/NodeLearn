@@ -21,11 +21,12 @@ window.stepProgress.draw = function (option) {
             }
         }
     };
-    draw.setStage = (containerId) => {
+    draw.setStage = (containerId, optional) => {
         draw.__.stage = new Konva.Stage({
             container: containerId,   // id of container <div>
             width: draw.option.stageWidth,
-            height: draw.option.stageHeight
+            height: draw.option.stageHeight,
+            ...optional
         });
         draw.__.layer = {
             bg: new Konva.Layer(),
@@ -151,7 +152,6 @@ window.stepProgress.draw = function (option) {
         return connector;
     };
     draw.phase = (fromX, width, text) => {
-        console.log(fromX, width, text)
         let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY);
         let phase = new Konva.Rect({
             x: fromX,
@@ -159,16 +159,17 @@ window.stepProgress.draw = function (option) {
             width: width,
             height: phaseHeight,
             cornerRadius: 10,
-            fill: "#FFFFFF"
+            fill: "#FFFFFF",
         });
         let textShape = new Konva.Text({
             x: fromX,
             y: draw.option.paddingY + 14,
             width: width,
             text: text,
-            fontSize: 24,
+            fontSize: 12,
             fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-            align: 'center'
+            align: 'center',
+            wrap: "none"
         });
 
         draw.layerPhase().add(phase);
