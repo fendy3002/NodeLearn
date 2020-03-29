@@ -4,13 +4,15 @@ window.stepProgress.make = window.stepProgress.make || {};
 window.stepProgress.make = function (containerId, option) {
     let make = {
         option: {
-            space: 100,
-            vSpace: 50,
+            pointSpace: 50,
+            phaseSpace: 10,
+            phasePaddingX: 20,
+            vSpace: 40,
             stageHeight: 1000,
             stageWidth: 5000,
             paddingX: 20,
             paddingY: 10,
-            startX: 50,
+            startX: 30,
             phase: [],
             ...option
         },
@@ -30,12 +32,43 @@ window.stepProgress.make = function (containerId, option) {
             width: null
         };
     }
+    make.updatePhaseFromShadowPoint = (shadowPoint) => {
+        shadowPoint.phase.width = Math.max(shadowPoint.phase.width, shadowPoint.x);
+        if (shadowPoint.pointType != "parallel" && shadowPoint.pointType != "parallel_end") {
+            if (shadowPoint.next) {
+                make.updatePhaseFromShadowPoint(shadowPoint.next);
+            }
+        }
+        else if (shadowPoint.pointType == "parallel") {
+            for (let item of shadowPoint.items) {
+                make.updatePhaseFromShadowPoint(item);
+            }
+            if (shadowPoint.next) {
+                make.updatePhaseFromShadowPoint(shadowPoint.next);
+            }
+        }
+        else if (shadowPoint.pointType == "parallel_end") {
+            if (shadowPoint.next) {
+                make.updatePhaseFromShadowPoint(shadowPoint.next);
+            }
+        }
+    };
+    make.updatePhase = () => {
+        let x = make.option.paddingX + make.option.startX + 
+            make.option.phaseSpace + make.option.phasePaddingX;
+        for(let phaseIndex of Object.keys(phaseContext)){
+            let phase = phaseContext[phaseIndex];
+            phase.startX = x - make.option.phaseSpace;
+            phase.width += 2 * make.option.phaseSpace;
+            x = x + phase.width + make.option.phaseSpace;
+        }
+    };
     make.preRender = (point, prev) => {
         let shadowPoint = {};
         shadowPoint.type = point.type;
         shadowPoint.pointType = point.pointType;
         shadowPoint.phase = phaseContext[point.phase];
-        shadowPoint.x = prev.x + make.option.space;
+        shadowPoint.x = prev.x + make.option.pointSpace;
         shadowPoint.y = prev.y;
         if (point.pointType != "parallel") {
             shadowPoint.height = make.option.vSpace;
@@ -75,7 +108,7 @@ window.stepProgress.make = function (containerId, option) {
                 }
                 shadowItem.type = pointItem.type;
                 shadowItem.phase = phaseContext[pointItem.phase];
-                shadowItem.x = shadowPoint.x + make.option.space;
+                shadowItem.x = shadowPoint.x + make.option.pointSpace;
                 shadowItem.y = shadowPoint.y + shadowPoint.height;
                 shadowItem.height = make.option.vSpace;
                 shadowItem.prev = shadowPoint;
@@ -110,7 +143,7 @@ window.stepProgress.make = function (containerId, option) {
                 shadowPoint.height += shadowItem.height;
                 shadowPoint.items.push(shadowItem);
             }
-            shadowParallelEnd.x = maxX + make.option.space;
+            shadowParallelEnd.x = maxX + make.option.pointSpace;
             shadowParallelEnd.type = hasPending ? "pending" : "done";
             shadowParallelEnd.phase = phaseContext[maxPhase];
             if (point.next) {
@@ -119,7 +152,6 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.height += make.option.vSpace;
         }
         shadowPoint.prev = prev;
-
         return shadowPoint;
     };
     make.renderShadowPoint = (shadowPoint, prevPoint) => {
@@ -180,7 +212,6 @@ window.stepProgress.make = function (containerId, option) {
                 y: shadowPoint.y
             }, shadowPoint.type);
             if (prevPoint.nexts) {
-                console.log(prevPoint.nexts);
                 for (let each of prevPoint.nexts) {
                     let last = each;
                     while (last.next) {
@@ -195,6 +226,12 @@ window.stepProgress.make = function (containerId, option) {
         }
         return point;
     };
+    make.renderPhase = () => {
+        for(let phaseIndex of Object.keys(phaseContext)){
+            let phase = phaseContext[phaseIndex]
+            draw.phase(phase.startX, phase.width, phase.text);
+        }
+    };
     make.render = (point) => {
         let shadowPoint = make.preRender(point, {
             x: make.option.paddingX + make.option.startX,
@@ -203,6 +240,8 @@ window.stepProgress.make = function (containerId, option) {
             pointType: "start",
             phase: null
         });
+        make.updatePhaseFromShadowPoint(shadowPoint);
+        make.updatePhase();
 
         draw.setStage(containerId);
         let startPoint = draw.start({
@@ -210,6 +249,7 @@ window.stepProgress.make = function (containerId, option) {
             y: make.option.paddingY + 80
         }, "done");
         make.renderShadowPoint(shadowPoint);
+        make.renderPhase();
         draw.draw();
     };
 

@@ -137,8 +137,8 @@ window.stepProgress.draw = function (option) {
         else {
             linePoints = [
                 to.x(), to.y(),
-                to.x() - 50, to.y(),
-                to.x() - 50, from.y(),
+                to.x() - (draw.option.pointSpace / 2), to.y(),
+                to.x() - (draw.option.pointSpace / 2), from.y(),
                 from.x(), from.y()
             ];
         }
@@ -150,13 +150,13 @@ window.stepProgress.draw = function (option) {
         connector.zIndex(0);
         return connector;
     };
-    draw.phase = (fromX, toX, text) => {
+    draw.phase = (fromX, width, text) => {
+        console.log(fromX, width, text)
         let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY);
-        let phaseWidth = toX - fromX;
         let phase = new Konva.Rect({
             x: fromX,
             y: draw.option.paddingY,
-            width: phaseWidth,
+            width: width,
             height: phaseHeight,
             cornerRadius: 10,
             fill: "#FFFFFF"
@@ -164,7 +164,7 @@ window.stepProgress.draw = function (option) {
         let textShape = new Konva.Text({
             x: fromX,
             y: draw.option.paddingY + 14,
-            width: phaseWidth,
+            width: width,
             text: text,
             fontSize: 24,
             fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
