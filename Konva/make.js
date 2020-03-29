@@ -29,9 +29,11 @@ window.stepProgress.make = function (containerId, option) {
             index: i,
             text: make.option.phase[i],
             startX: null,
-            width: null
+            width: null,
+            member: []
         };
     }
+    let pointMap = {};
     make.updatePhaseFromShadowPoint = (shadowPoint) => {
         shadowPoint.phase.width = Math.max(shadowPoint.phase.width, shadowPoint.x);
         if (shadowPoint.pointType != "parallel" && shadowPoint.pointType != "parallel_end") {
@@ -54,9 +56,9 @@ window.stepProgress.make = function (containerId, option) {
         }
     };
     make.updatePhase = () => {
-        let x = make.option.paddingX + make.option.startX + 
+        let x = make.option.paddingX + make.option.startX +
             make.option.phaseSpace + make.option.phasePaddingX;
-        for(let phaseIndex of Object.keys(phaseContext)){
+        for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
             phase.startX = x - make.option.phaseSpace;
             phase.width += 2 * make.option.phaseSpace;
@@ -227,20 +229,74 @@ window.stepProgress.make = function (containerId, option) {
         return point;
     };
     make.renderPhase = () => {
-        for(let phaseIndex of Object.keys(phaseContext)){
+        for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex]
             draw.phase(phase.startX, phase.width, phase.text);
         }
     };
 
-    make.generateVirtualPositionEach = (point, prevPoint) => {
-
-    };
-    make.generateVirtualPosition = (point) => {
-
+    make.generatePointRelationEach = (point, prevPoint) => {
+        let shadowPoint = {};
+        shadowPoint.point = point;
+        shadowPoint.type = point.type;
+        shadowPoint.pointType = point.pointType;
+        shadowPoint.phase = phaseContext[point.phase];
+        if (prevPoint) {
+            shadowPoint.prev = prevPoint;
+            if (prevPoint.pointType != "parallel") {
+                shadowPoint.id = prevPoint.id + "_0";
+            }
+            else if (prevPoint.pointType == "parallel") {
+                shadowPoint.id = prevPoint.id + "_" + prevPoint.nexts.length;
+            }
+        }
+        else {
+            shadowPoint.id = "0";
+        }
+        shadowPoint.phase.member.push(shadowPoint.id);
+        pointMap[shadowPoint.id] = shadowPoint;
+        if (shadowPoint.pointType != "parallel") {
+            if (point.next) {
+                shadowPoint.next = make.generatePointRelationEach(point.next, shadowPoint);
+            }
+        }
+        else if (shadowPoint.pointType == "parallel") {
+            shadowPoint.nexts = [];
+            let maxPhaseIndex = 0;
+            let longestId = "";
+            let hasPending = false;
+            let shadowParallelEnd = {
+                pointType: "parallel_end",
+                prevs: [],
+            };
+            for (let each of point.items) {
+                let itemPoint = make.generatePointRelationEach(each, shadowPoint);
+                shadowPoint.nexts.push(itemPoint);
+                while (itemPoint.next) {
+                    itemPoint = itemPoint.next;
+                }
+                if (longestId.length < itemPoint.id.length) {
+                    longestId = itemPoint.id;
+                }
+                hasPending = itemPoint.type == "active" || itemPoint.type == "pending";
+                maxPhaseIndex = Math.max(maxPhaseIndex, itemPoint.phase.index);
+                shadowParallelEnd.prevs.push(itemPoint);
+            }
+            shadowParallelEnd.type = hasPending ? "pending" : "done";
+            shadowParallelEnd.phase = phaseContext[maxPhaseIndex];
+            shadowParallelEnd.prev = shadowPoint;
+            shadowParallelEnd.id = longestId + "_0";
+            shadowPoint.next = shadowParallelEnd;
+            if (point.next) {
+                shadowParallelEnd.next = make.generatePointRelationEach(point.next, shadowParallelEnd);
+            }
+        }
+        return shadowPoint;
     };
 
     make.render = (point) => {
+        let pointRelation = make.generatePointRelationEach(point, null);
+
         let shadowPoint = make.generateShadowPoint(point, {
             x: make.option.paddingX + make.option.startX,
             y: make.option.paddingY + 80,
