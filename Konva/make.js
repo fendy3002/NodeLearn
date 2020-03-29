@@ -281,6 +281,9 @@ window.stepProgress.make = function (containerId, option) {
             shadowParallelEnd.prev = shadowPoint;
             shadowParallelEnd.id = longestId + "_0";
             shadowPoint.next = shadowParallelEnd;
+
+            pointMap[shadowParallelEnd.id] = shadowParallelEnd;
+            shadowParallelEnd.phase.member.push(shadowParallelEnd.id);
             if (point.next) {
                 shadowParallelEnd.next = make.generatePointRelationEach(point.next, shadowParallelEnd);
             }
@@ -317,7 +320,7 @@ window.stepProgress.make = function (containerId, option) {
         }
     };
     make.updateX = (point) => {
-        let minX = startX + (point.minX * make.option.pointSpace);
+        let minX = startX + (point.minX * make.option.pointSpace) + make.option.phaseSpace + make.option.phasePaddingX;
         if (point.pointType != "parallel" && point.pointType != "parallel_end") {
             let prevX = 0;
             if (point.prev) {
