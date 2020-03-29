@@ -10,40 +10,82 @@
     </div>
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
     <script>
-        let style = {
-        };
+        let style = {};
         style.point = {
-            radius: 13,
+            base: {
+                radius: 13,
+                fill: '#FFFFFF',
+                stroke: '#AAAAAA',
+                strokeWidth: 6
+            }
+        };
+
+        style.point.pending = {
+            ...style.point.base,
             fill: '#FFFFFF',
             stroke: '#AAAAAA',
-            strokeWidth: 6
         };
-        style.pointHover = {
+        style.point.pendingHover = {
             fill: '#DFDFDF',
             stroke: '#BABABA'
         };
-        style.pointDone = {
-            ...style.point,
+        style.point.done = {
+            ...style.point.base,
             stroke: '#4BC9F6',
         };
-        style.pointDoneHover = {
+        style.point.doneHover = {
             stroke: '#b7e9fb'
         };
-        style.pointActive = {
-            ...style.point,
+        style.point.active = {
+            ...style.point.base,
             stroke: '#56B64C',
         };
-        style.pointActiveHover = {
+        style.point.activeHover = {
             stroke: '#bbe1b7'
         };
-        style.pointTerminated = {
-            ...style.point,
+        style.point.terminated = {
+            ...style.point.base,
             stroke: '#EF5839',
         };
-        style.pointTerminatedHover = {
+        style.point.terminatedHover = {
             stroke: '#f8bcaf'
         };
+        style.hConnector = {
+            height: 4,
+            fill: '#AAAAAA'
+        };
+        style.hConnectorDone = {
+            height: 4,
+            fill: '#4BC9F6'
+        };
+        style.hConnectorActive = {
+            height: 4,
+            fill: '#56B64C'
+        };
+        style.hConnectorTerminated = {
+            height: 4,
+            fill: '#EF5839'
+        };
 
+        let make = {};
+        make.point = (pos, type) => {
+            let useStyle = style.point[type];
+            let useHoverStyle = style.point[type + "Hover"];
+            let point = new Konva.Circle({
+                x: pos.x,
+                y: pos.y,
+                ...useStyle
+            });
+            point.on("mouseover", (evt) => {
+                point.stroke(useHoverStyle.stroke);
+                layer.draw();
+            });
+            point.on("mouseout", (evt) => {
+                point.stroke(useStyle.stroke);
+                layer.draw();
+            });
+            return point;
+        };
     </script>
     <script>
         let stageWidth = 1000;
@@ -66,17 +108,8 @@
             listening: true  // listen for clicks on the stage rectangle
         });
         layer.add(stageRect);
-        layer.add(new Konva.Circle({
-            x: 50,
-            y: 100,
-            ...style.point
-        }));
-        let done = new Konva.Circle({
-            x: 100,
-            y: 100,
-            ...style.pointDone
-        });
-        layer.add(done);
+        layer.add(make.point({x: 50, y: 100}, "pending"));
+        layer.add(make.point({x: 100, y: 100}, "done"));
         // add the layer to the stage
         stage.add(layer);
 
