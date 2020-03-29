@@ -71,7 +71,9 @@ window.stepProgress.make = function (containerId, option) {
                 let pointItem = point.items[i];
                 let shadowItem = {};
                 shadowItem.type = pointItem.type;
+                shadowItem.pointType = pointItem.pointType;
                 shadowItem.phase = phaseContext[pointItem.phase];
+                shadowItem.items = pointItem.items;
                 shadowItem.x = shadowPoint.x + make.option.space;
                 shadowItem.y = shadowPoint.y + (i * make.option.vSpace);
                 shadowItem.prev = shadowPoint;
@@ -176,6 +178,7 @@ window.stepProgress.make = function (containerId, option) {
             }, shadowPoint.type);
             if (prevPoint.nexts) {
                 for (let each of prevPoint.nexts) {
+                    console.log(each);
                     let last = each;
                     while (last.next) {
                         last = last.next;
@@ -197,6 +200,7 @@ window.stepProgress.make = function (containerId, option) {
             pointType: "start",
             phase: null
         });
+        console.log(shadowPoint);
         make.renderShadowPoint(shadowPoint);
         draw.draw();
     };
