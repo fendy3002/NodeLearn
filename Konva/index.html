@@ -9,210 +9,10 @@
         <div id="container"></div>
     </div>
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
+    <script src="./style.js"></script>
+    <script src="./make.js"></script>
     <script>
-        let style = {};
-        style.point = {
-            base: {
-                radius: 12,
-                fill: '#FFFFFF',
-                stroke: '#AAAAAA',
-                strokeWidth: 6
-            }
-        };
-
-        style.point.pending = {
-            ...style.point.base,
-            fill: '#FFFFFF',
-            stroke: '#AAAAAA',
-        };
-        style.point.pendingHover = {
-            fill: '#DFDFDF',
-            stroke: '#BABABA'
-        };
-        style.point.done = {
-            ...style.point.base,
-            stroke: '#4BC9F6',
-        };
-        style.point.doneHover = {
-            stroke: '#b7e9fb'
-        };
-        style.point.active = {
-            ...style.point.base,
-            stroke: '#56B64C',
-        };
-        style.point.activeHover = {
-            stroke: '#bbe1b7'
-        };
-        style.point.terminated = {
-            ...style.point.base,
-            stroke: '#EF5839',
-        };
-        style.point.terminatedHover = {
-            stroke: '#f8bcaf'
-        };
-
-        style.hConnector = {
-            base: {
-                strokeWidth: 4,
-            }
-        };
-        style.hConnector.pending = {
-            ...style.hConnector.base,
-            stroke: '#AAAAAA'
-        };
-        style.hConnector.done = {
-            ...style.hConnector.base,
-            stroke: '#4BC9F6'
-        };
-        style.hConnector.active = {
-            ...style.hConnector.base,
-            stroke: '#56B64C'
-        };
-        style.hConnector.terminated = {
-            ...style.hConnector.base,
-            stroke: '#EF5839'
-        };
-
-        style.phase = {
-            base: {
-                fill: "#FFFFFF",
-
-            }
-        };
-
-        let make = {
-            option: {
-                space: 300,
-                paddingX: 20,
-                paddingY: 20,
-                startX: 50,
-            },
-            __: {
-                stage: null,
-                layer: {
-                    bg: null,
-                    phase: null,
-                    point: null,
-                }
-            }
-        };
-        let pointHelper = (point) => {
-            return {
-                nextPhase: () => {
-                    
-                },
-                nextPoint: () => {
-
-                }
-            };
-        };
-        make.stage = (stage = null) => {
-            if (stage) {
-                make.__.stage = stage;
-                make.__.layer = {
-                    bg: new Konva.Layer(),
-                    phase: new Konva.Layer(),
-                    point: new Konva.Layer(),
-                };
-                for (let key of Object.keys(make.__.layer)) {
-                    make.__.stage.add(make.__.layer[key]);
-                }
-                let bgRect = new Konva.Rect({
-                    x: 0,
-                    y: 0,
-                    width: stage.width(),
-                    height: stage.height(),
-                    fill: "#DDDDDD",
-                    listening: true  // listen for clicks on the stage rectangle
-                });
-                make.__.layer.bg.add(bgRect);
-            }
-            else {
-                return make.__.stage;
-            }
-        };
-        make.layerPoint = (layer = null) => {
-            return make.__.layer.point;
-        };
-        make.layerPhase = (layer = null) => {
-            return make.__.layer.phase;
-        };
-        make.draw = () => {
-            for (let key of Object.keys(make.__.layer)) {
-                make.__.layer[key].draw();
-            }
-        };
-        make.start = (type) => {
-            let useStyle = style.point[type];
-            let point = new Konva.Circle({
-                x: make.option.paddingX + make.option.startX,
-                y: make.option.paddingY + 80,
-                radius: 10,
-                fill: useStyle.stroke
-            });
-            make.layerPoint().add(point);
-            return point;
-        };
-        make.end = (pos) => {
-            let point = new Konva.Circle({
-                x: pos.x,
-                y: pos.y,
-                radius: 12,
-                fill: "#4BC9F6"
-            });
-            make.layerPoint().add(point);
-            return point;
-        };
-        make.point = (pos, type) => {
-            let useStyle = style.point[type];
-            let useHoverStyle = style.point[type + "Hover"];
-            let point = new Konva.Circle({
-                x: pos.x,
-                y: pos.y,
-                ...useStyle
-            });
-            point.setAttr("ptype", type);
-            point.on("mouseenter", (evt) => {
-                stage.container().style.cursor = 'pointer';
-                point.stroke(useHoverStyle.stroke);
-                make.layerPoint().draw();
-            });
-            point.on("mouseout", (evt) => {
-                stage.container().style.cursor = 'default';
-                point.stroke(useStyle.stroke);
-                make.layerPoint().draw();
-            });
-            make.layerPoint().add(point);
-            return point;
-        };
-        make.connect = (from, to) => {
-            let connectorType = to.getAttr("ptype");
-            let linePoints = [];
-            if (to.y() - from.y() == 0) {
-                linePoints = [to.x(), to.y(), from.x(), from.y()];
-            }
-            else {
-                linePoints = [
-                    to.x(), to.y(),
-                    to.x() - 50, to.y(),
-                    to.x() - 50, from.y(),
-                    from.x(), from.y()
-                ];
-            }
-            let connector = new Konva.Line({
-                points: linePoints,
-                ...style.hConnector[connectorType]
-            });
-            make.layerPoint().add(connector);
-            connector.zIndex(0);
-            return connector;
-        };
-        make.phase = (fromPoint, toPoint, text) => {
-            let phaseHeight = make.stage().height();
-            
-        };
-    </script>
-    <script>
+        let make = window.stepProgress.make({});
         let stageWidth = 1000;
         let stageHeight = 300;
         // first we need to create a stage
@@ -223,11 +23,13 @@
         });
         make.stage(stage);
         make.start("done");
-        let a = make.point({ x: 50, y: 100 }, "done");
-        let b = make.point({ x: 150, y: 100 }, "done");
-        let c = make.point({ x: 250, y: 130 }, "pending");
+        let a = make.point({ x: 200, y: 100 }, "done");
+        let b = make.point({ x: 350, y: 100 }, "done");
+        let c = make.point({ x: 500, y: 130 }, "pending");
+
         make.connect(a, b);
         make.connect(b, c);
+        let phase = make.phase(150, 550, "PHASE1");
         make.draw();
     </script>
 </body>
