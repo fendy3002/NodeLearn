@@ -55,29 +55,6 @@ window.stepProgress.make = function (containerId, option) {
             }
         }
     };
-    make.updatePhaseFromPointRelation = () => {
-        for (let phaseIndex of Object.keys(phaseContext)) {
-            let phase = phaseContext[phaseIndex];
-            let idLengths = phase.member.map(k => k.split("_").length);
-            phase.minX = idLengths[0];
-            phase.maxX = idLengths[0];
-            for (let i = 1; i < idLengths.length; i++) {
-                phase.minX = Math.min(phase.minX, idLengths[i]);
-                phase.maxX = Math.max(phase.maxX, idLengths[i]);
-            }
-            phase.maxX++;
-        }
-        let maxX = 0;
-        for (let phaseIndex of Object.keys(phaseContext)) {
-            let phase = phaseContext[phaseIndex];
-            if (phase.minX < maxX + 1) {
-                let width = phase.maxX - phase.minX;
-                phase.minX = maxX + 1;
-                phase.maxX = phase.minX + width;
-            }
-            maxX = phase.maxX;
-        }
-    };
     make.updatePhase = () => {
         let x = make.option.paddingX + make.option.startX +
             make.option.phaseSpace + make.option.phasePaddingX;
@@ -316,27 +293,129 @@ window.stepProgress.make = function (containerId, option) {
         }
         return shadowPoint;
     };
+    make.updatePhaseFromPointRelation = () => {
+        for (let phaseIndex of Object.keys(phaseContext)) {
+            let phase = phaseContext[phaseIndex];
+            let idLengths = phase.member.map(k => k.split("_").length);
+            phase.minX = idLengths[0];
+            phase.maxX = idLengths[0];
+            for (let i = 1; i < idLengths.length; i++) {
+                phase.minX = Math.min(phase.minX, idLengths[i]);
+                phase.maxX = Math.max(phase.maxX, idLengths[i]);
+            }
+            phase.maxX++;
+        }
+        let maxX = 0;
+        for (let phaseIndex of Object.keys(phaseContext)) {
+            let phase = phaseContext[phaseIndex];
+            if (phase.minX < maxX + 1) {
+                let width = phase.maxX - phase.minX;
+                phase.minX = maxX + 1;
+                phase.maxX = phase.minX + width;
+            }
+            maxX = phase.maxX;
+            for (let memberId of phase.member) {
+                let member = pointMap[memberId];
+                member.minX = phase.minX;
+            }
+        }
+    };
+    make.updateX = (point) => {
+        let minX = point.minX * make.option.pointSpace;
+        if (point.pointType != "parallel" && point.pointType != "parallel_end") {
+            let prevX = 0;
+            if (point.prev) {
+                prevX = point.prev.x + make.option.pointSpace;
+            }
+            if (minX > prevX) {
+                point.x = minX;
+            }
+            else {
+                point.x = prevX;
+            }
+            if (point.next) {
+                make.updateX(point.next);
+            }
+        }
+        else if (point.pointType == "parallel") {
+            let prevX = 0;
+            if (point.prev) {
+                prevX = point.prev.x + make.option.pointSpace;
+            }
+            if (minX > prevX) {
+                point.x = minX;
+            }
+            else {
+                point.x = prevX;
+            }
+            for (let next of point.nexts) {
+                make.updateX(next);
+            }
+            make.updateX(point.next);
+        }
+        else if (point.pointType == "parallel_end") {
+            let prevX = 0;
+            for (let prev of point.prevs) {
+                prevX = Math.max(prev.x, prevX);
+            }
+            point.x = prevX + make.option.pointSpace;
+            if (point.next) {
+                make.updateX(point.next);
+            }
+        }
+    };
+    make.updateY = (point) => {
+        if (!point.prev) {
+            point.y = make.option.paddingY + 80;
+            point.height = make.option.vSpace;
+        }
+        else if (point.prev != "parallel") {
+            point.y = point.prev.y;
+            point.height = make.option.vSpace;
+        }
+        else if (point.prev == "parallel") {
+            point.y = point.prev.y + point.height;
+            point.height = make.option.vSpace;
+        }
+
+        if (point.pointType != "parallel" && point.pointType != "parallel_end") {
+            if (point.next && point.next.pointType != "parallel_end") {
+                make.updateY(point.next);
+            }
+        }
+        else if (point.pointType == "parallel") {
+            point.height = 0;
+            for (let next of point.nexts) {
+                make.updateY(next);
+                point.height += next.height;
+            }
+            make.updateY(point.next);
+        }
+    };
 
     make.render = (point) => {
         let pointRelation = make.generatePointRelationEach(point, null);
         make.updatePhaseFromPointRelation();
+        make.updateX(pointRelation);
+        make.updateY(pointRelation);
+        console.log(pointMap);
 
-        let shadowPoint = make.generateShadowPoint(point, {
-            x: make.option.paddingX + make.option.startX,
-            y: make.option.paddingY + 80,
-            type: "done",
-            pointType: "start",
-            phase: null
-        });
-        make.updatePhaseFromShadowPoint(shadowPoint);
-        make.updatePhase();
+        // let shadowPoint = make.generateShadowPoint(point, {
+        //     x: make.option.paddingX + make.option.startX,
+        //     y: make.option.paddingY + 80,
+        //     type: "done",
+        //     pointType: "start",
+        //     phase: null
+        // });
+        // make.updatePhaseFromShadowPoint(shadowPoint);
+        // make.updatePhase();
 
         draw.setStage(containerId);
         let startPoint = draw.start({
             x: make.option.paddingX + make.option.startX,
             y: make.option.paddingY + 80
         }, "done");
-        make.renderShadowPoint(shadowPoint);
+        make.renderShadowPoint(pointRelation);
         make.renderPhase();
         draw.draw();
     };
