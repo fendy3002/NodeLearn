@@ -71,16 +71,6 @@ window.stepProgress.draw = function (option) {
         draw.layerPoint().add(point);
         return point;
     };
-    draw.end = (pos) => {
-        let point = new Konva.Circle({
-            x: pos.x,
-            y: pos.y,
-            radius: 12,
-            fill: "#4BC9F6"
-        });
-        draw.layerPoint().add(point);
-        return point;
-    };
     draw.point = (pos, type) => {
         let useStyle = style.point[type];
         let useHoverStyle = style.point[type + "Hover"];

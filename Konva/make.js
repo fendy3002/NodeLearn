@@ -333,7 +333,7 @@ window.stepProgress.make = function (containerId, option) {
         let longestId = "";
         for (let pointId of Object.keys(pointMap)) {
             lastX = Math.max(lastX, pointMap[pointId].x);
-            if (pointId.length > longestId) {
+            if (pointId.length > longestId.length) {
                 longestId = pointId;
             }
         }
@@ -349,11 +349,14 @@ window.stepProgress.make = function (containerId, option) {
         });
         make.renderShadowPoint(pointRelation);
         make.renderPhase();
+
+        let lastPoint = pointMap[longestId];
         let endPoint = draw.start({
             x: lastX + (2 * make.option.pointSpace) + make.option.phaseSpace,
             y: make.option.paddingY + 80
-        }, "done");
-        draw.connect(pointMap[longestId].renderPoint, endPoint);
+        }, lastPoint.type);
+        endPoint.setAttr("ptype", lastPoint.type);
+        draw.connect(lastPoint.renderPoint, endPoint);
         draw.draw();
     };
 
