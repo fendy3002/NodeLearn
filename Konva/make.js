@@ -6,7 +6,7 @@ window.stepProgress.make = function (containerId, option) {
         option: {
             space: 100,
             vSpace: 50,
-            stageHeight: 300,
+            stageHeight: 1000,
             stageWidth: 5000,
             paddingX: 20,
             paddingY: 10,
@@ -43,9 +43,11 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.phase = phaseContext[point.phase];
             shadowPoint.x = prev.x + make.option.space;
             shadowPoint.y = prev.y;
+            shadowPoint.height = make.option.vSpace;
             // case for last step in parallel
             if (point.next) {
                 shadowPoint.next = make.preRender(point.next, shadowPoint);
+                shadowPoint.height = Math.max(shadowPoint.height, shadowPoint.next.height);
             }
             else {
                 shadowPoint.next = null;
@@ -57,6 +59,8 @@ window.stepProgress.make = function (containerId, option) {
             shadowPoint.phase = phaseContext[point.phase];
             shadowPoint.x = prev.x + make.option.space;
             shadowPoint.y = prev.y;
+            shadowPoint.height = 0;
+
             let shadowParallelEnd = {
                 y: shadowPoint.y,
                 prevs: []
@@ -69,19 +73,22 @@ window.stepProgress.make = function (containerId, option) {
             let hasPending = false;
             for (let i = 0; i < point.items.length; i++) {
                 let pointItem = point.items[i];
+                console.log(i, shadowPoint.y, shadowPoint.height, pointItem);
                 let shadowItem = {};
                 if (pointItem.pointType == "parallel") {
                     shadowItem = make.preRender(pointItem, {
                         ...shadowPoint,
-                        y: shadowPoint.y + (i * make.option.vSpace)
+                        y: shadowPoint.y + shadowPoint.height
                     });
+                    shadowPoint.height += shadowItem.height;
                     shadowPoint.items.push(shadowItem);
                     continue;
                 }
                 shadowItem.type = pointItem.type;
                 shadowItem.phase = phaseContext[pointItem.phase];
                 shadowItem.x = shadowPoint.x + make.option.space;
-                shadowItem.y = shadowPoint.y + (i * make.option.vSpace);
+                shadowItem.y = shadowPoint.y + shadowPoint.height;
+                shadowItem.height = make.option.vSpace;
                 shadowItem.prev = shadowPoint;
 
                 if (shadowItem.type == "active" || shadowItem.type == "pending") {
@@ -92,6 +99,7 @@ window.stepProgress.make = function (containerId, option) {
                 if (pointItem.next) {
                     shadowItem.next = make.preRender(pointItem.next, shadowItem);
                     let _next = shadowItem.next;
+                    shadowPoint.height = Math.max(shadowPoint.height, _next.height);
                     while (_next.next) {
                         if (_next.type == "active" || _next.type == "pending") {
                             hasPending = true;
@@ -110,6 +118,7 @@ window.stepProgress.make = function (containerId, option) {
                 else {
                     shadowParallelEnd.prevs.push(shadowItem);
                 }
+                shadowPoint.height += shadowItem.height;
                 shadowPoint.items.push(shadowItem);
             }
             shadowParallelEnd.x = maxX + make.option.space;
@@ -118,6 +127,7 @@ window.stepProgress.make = function (containerId, option) {
             if (point.next) {
                 shadowParallelEnd.next = make.preRender(point.next, shadowParallelEnd);
             }
+            shadowPoint.height += make.option.vSpace;
             // else {
             //     return shadowParallelEnd;
             // }
