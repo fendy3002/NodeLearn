@@ -70,13 +70,20 @@ window.stepProgress.make = function (containerId, option) {
             for (let i = 0; i < point.items.length; i++) {
                 let pointItem = point.items[i];
                 let shadowItem = {};
+                if (pointItem.pointType == "parallel") {
+                    shadowItem = make.preRender(pointItem, {
+                        ...shadowPoint,
+                        y: shadowPoint.y + (i * make.option.vSpace)
+                    });
+                    shadowPoint.items.push(shadowItem);
+                    continue;
+                }
                 shadowItem.type = pointItem.type;
-                shadowItem.pointType = pointItem.pointType;
                 shadowItem.phase = phaseContext[pointItem.phase];
-                shadowItem.items = pointItem.items;
                 shadowItem.x = shadowPoint.x + make.option.space;
                 shadowItem.y = shadowPoint.y + (i * make.option.vSpace);
                 shadowItem.prev = shadowPoint;
+
                 if (shadowItem.type == "active" || shadowItem.type == "pending") {
                     hasPending = true;
                 }
