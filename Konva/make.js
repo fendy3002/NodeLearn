@@ -55,6 +55,29 @@ window.stepProgress.make = function (containerId, option) {
             }
         }
     };
+    make.updatePhaseFromPointRelation = () => {
+        for (let phaseIndex of Object.keys(phaseContext)) {
+            let phase = phaseContext[phaseIndex];
+            let idLengths = phase.member.map(k => k.split("_").length);
+            phase.minX = idLengths[0];
+            phase.maxX = idLengths[0];
+            for (let i = 1; i < idLengths.length; i++) {
+                phase.minX = Math.min(phase.minX, idLengths[i]);
+                phase.maxX = Math.max(phase.maxX, idLengths[i]);
+            }
+            phase.maxX++;
+        }
+        let maxX = 0;
+        for (let phaseIndex of Object.keys(phaseContext)) {
+            let phase = phaseContext[phaseIndex];
+            if (phase.minX < maxX + 1) {
+                let width = phase.maxX - phase.minX;
+                phase.minX = maxX + 1;
+                phase.maxX = phase.minX + width;
+            }
+            maxX = phase.maxX;
+        }
+    };
     make.updatePhase = () => {
         let x = make.option.paddingX + make.option.startX +
             make.option.phaseSpace + make.option.phasePaddingX;
@@ -296,6 +319,7 @@ window.stepProgress.make = function (containerId, option) {
 
     make.render = (point) => {
         let pointRelation = make.generatePointRelationEach(point, null);
+        make.updatePhaseFromPointRelation();
 
         let shadowPoint = make.generateShadowPoint(point, {
             x: make.option.paddingX + make.option.startX,
