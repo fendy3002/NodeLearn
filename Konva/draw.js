@@ -5,7 +5,8 @@ window.stepProgress.draw = function (option) {
     let style = window.stepProgress.style;
     let draw = {
         option: {
-            space: 300,
+            stageHeight: 300,
+            stageWidth: 1000,
             paddingX: 20,
             paddingY: 10,
             startX: 50,
@@ -20,35 +21,37 @@ window.stepProgress.draw = function (option) {
             }
         }
     };
-    draw.stage = (stage = null) => {
-        if (stage) {
-            draw.__.stage = stage;
-            draw.__.layer = {
-                bg: new Konva.Layer(),
-                phase: new Konva.Layer(),
-                point: new Konva.Layer(),
-            };
-            for (let key of Object.keys(draw.__.layer)) {
-                draw.__.stage.add(draw.__.layer[key]);
-            }
-            let bgRect = new Konva.Rect({
-                x: 0,
-                y: 0,
-                width: stage.width(),
-                height: stage.height(),
-                fill: "#DDDDDD",
-                listening: true  // listen for clicks on the stage rectangle
-            });
-            draw.__.layer.bg.add(bgRect);
+    draw.setStage = (containerId) => {
+        draw.__.stage = new Konva.Stage({
+            container: containerId,   // id of container <div>
+            width: draw.option.stageWidth,
+            height: draw.option.stageHeight
+        });
+        draw.__.layer = {
+            bg: new Konva.Layer(),
+            phase: new Konva.Layer(),
+            point: new Konva.Layer(),
+        };
+        for (let key of Object.keys(draw.__.layer)) {
+            draw.__.stage.add(draw.__.layer[key]);
         }
-        else {
-            return draw.__.stage;
-        }
+        let bgRect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: draw.__.stage.width(),
+            height: draw.__.stage.height(),
+            fill: "#DDDDDD",
+            listening: true  // listen for clicks on the stage rectangle
+        });
+        draw.__.layer.bg.add(bgRect);
+    }
+    draw.stage = () => {
+        return draw.__.stage;
     };
-    draw.layerPoint = (layer = null) => {
+    draw.layerPoint = () => {
         return draw.__.layer.point;
     };
-    draw.layerPhase = (layer = null) => {
+    draw.layerPhase = () => {
         return draw.__.layer.phase;
     };
     draw.draw = () => {
@@ -87,12 +90,12 @@ window.stepProgress.draw = function (option) {
         });
         point.setAttr("ptype", type);
         point.on("mouseenter", (evt) => {
-            stage.container().style.cursor = 'pointer';
+            draw.stage().container().style.cursor = 'pointer';
             point.stroke(useHoverStyle.stroke);
             draw.layerPoint().draw();
         });
         point.on("mouseout", (evt) => {
-            stage.container().style.cursor = 'default';
+            draw.stage().container().style.cursor = 'default';
             point.stroke(useStyle.stroke);
             draw.layerPoint().draw();
         });
