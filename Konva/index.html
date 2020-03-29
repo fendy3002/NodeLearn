@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <div id="stage-parent" style="overflow-x:scroll">
+        <div id="container"></div>
+    </div>
+    <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
+    <script>
+        let style = {
+        };
+        style.point = {
+            radius: 13,
+            fill: '#FFFFFF',
+            stroke: '#AAAAAA',
+            strokeWidth: 6
+        };
+        style.pointHover = {
+            fill: '#DFDFDF',
+            stroke: '#BABABA'
+        };
+        style.pointDone = {
+            ...style.point,
+            stroke: '#4BC9F6',
+        };
+        style.pointDoneHover = {
+            stroke: '#b7e9fb'
+        };
+        style.pointActive = {
+            ...style.point,
+            stroke: '#56B64C',
+        };
+        style.pointActiveHover = {
+            stroke: '#bbe1b7'
+        };
+        style.pointTerminated = {
+            ...style.point,
+            stroke: '#EF5839',
+        };
+        style.pointTerminatedHover = {
+            stroke: '#f8bcaf'
+        };
+
+    </script>
+    <script>
+        let stageWidth = 1000;
+        let stageHeight = 300;
+        // first we need to create a stage
+        var stage = new Konva.Stage({
+            container: 'container',   // id of container <div>
+            width: stageWidth,
+            height: stageHeight
+        });
+        // then create layer
+        var layer = new Konva.Layer();
+
+        var stageRect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: stageWidth,
+            height: stageHeight,
+            fill: "#DDDDDD",
+            listening: true  // listen for clicks on the stage rectangle
+        });
+        layer.add(stageRect);
+        layer.add(new Konva.Circle({
+            x: 50,
+            y: 100,
+            ...style.point
+        }));
+        let done = new Konva.Circle({
+            x: 100,
+            y: 100,
+            ...style.pointDone
+        });
+        layer.add(done);
+        // add the layer to the stage
+        stage.add(layer);
+
+        // draw the image
+        layer.draw();
+    </script>
+</body>
+
+</html>
