@@ -5,7 +5,7 @@ window.stepProgress.make = function (containerId, option) {
     let make = {
         option: {
             space: 100,
-            vSpace: 80,
+            vSpace: 50,
             stageHeight: 300,
             stageWidth: 1000,
             paddingX: 20,
@@ -37,9 +37,6 @@ window.stepProgress.make = function (containerId, option) {
         };
     }
     make.preRender = (point, prev) => {
-        if (!point) {
-            console.log(prev);
-        }
         let shadowPoint = {};
         if (point.pointType != "parallel") {
             shadowPoint.type = point.type;
@@ -90,6 +87,7 @@ window.stepProgress.make = function (containerId, option) {
                         if (_next.type == "active" || _next.type == "pending") {
                             hasPending = true;
                         }
+                        _next = _next.next;
                         maxX = Math.max(maxX, _next.x);
                         maxPhase = Math.max(maxPhase, _next.phase.index);
                     }
@@ -108,7 +106,12 @@ window.stepProgress.make = function (containerId, option) {
             shadowParallelEnd.x = maxX + make.option.space;
             shadowParallelEnd.type = hasPending ? "pending" : "done";
             shadowParallelEnd.phase = phaseContext[maxPhase];
-            shadowParallelEnd.next = make.preRender(point.next, shadowParallelEnd);
+            if (point.next) {
+                shadowParallelEnd.next = make.preRender(point.next, shadowParallelEnd);
+            }
+            // else {
+            //     return shadowParallelEnd;
+            // }
         }
         shadowPoint.prev = prev;
 
@@ -167,16 +170,18 @@ window.stepProgress.make = function (containerId, option) {
             }
         }
         else if (shadowPoint.pointType == "parallel_end") {
-            point = draw.parallel({
+            point = draw.parallelEnd({
                 x: shadowPoint.x,
                 y: shadowPoint.y
             }, shadowPoint.type);
-            for (let each of prevPoint.nexts) {
-                let last = each;
-                while (last.next) {
-                    last = last.next;
+            if (prevPoint.nexts) {
+                for (let each of prevPoint.nexts) {
+                    let last = each;
+                    while (last.next) {
+                        last = last.next;
+                    }
+                    draw.connect(last, point);
                 }
-                draw.connect(last, point);
             }
             if (shadowPoint.next) {
                 make.renderShadowPoint(shadowPoint.next, point);
