@@ -8,10 +8,13 @@ window.stepProgress.make = function (containerId, option) {
             phaseSpace: 10,
             phasePaddingX: 20,
             vSpace: 40,
-            stageHeight: 1000,
-            stageWidth: 5000,
+            minStageHeight: 300,
+            minStageWidth: 1000,
+            stageHeight: 300,
+            stageWidth: 1000,
             paddingX: 20,
             paddingY: 10,
+            footerHeight: 80,
             startX: 30,
             phase: [],
             ...option
@@ -341,12 +344,14 @@ window.stepProgress.make = function (containerId, option) {
             }
             stageHeight = Math.max(stageHeight, pointMap[pointId].y);
         }
+        stageHeight += make.option.footerHeight;
         for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
             stageRight = Math.max(stageRight, phase.startX + phase.width);
         }
         stageRight += make.option.startX + startX + make.option.paddingX;
-
+        stageRight = Math.max(make.option.minStageWidth, stageRight);
+        stageHeight = Math.max(make.option.minStageHeight, stageHeight);
         draw.setStage(containerId, {
             width: stageRight,
             height: stageHeight + (2 * make.option.paddingY) + make.option.phasePaddingX

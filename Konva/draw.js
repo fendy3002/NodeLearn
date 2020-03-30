@@ -142,7 +142,7 @@ window.stepProgress.draw = function (option) {
         return connector;
     };
     draw.phase = (fromX, width, text) => {
-        let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY);
+        let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY) - draw.option.footerHeight;
         let phase = new Konva.Rect({
             x: fromX,
             y: draw.option.paddingY,
