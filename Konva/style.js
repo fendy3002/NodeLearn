@@ -17,7 +17,7 @@ window.stepProgress.style = window.stepProgress.style || {};
     };
     style.point.pendingHover = {
         fill: '#DFDFDF',
-        stroke: '#BABABA'
+        stroke: '#CACACA'
     };
     style.point.done = {
         ...style.point.base,
