@@ -10,7 +10,7 @@ window.stepProgress.make = function (containerId, option) {
             vSpace: 40,
             minStageHeight: 300,
             minStageWidth: 1000,
-            minPhaseWidth: 80,
+            minPhaseWidth: 180,
             stageHeight: 300,
             stageWidth: 1000,
             paddingX: 20,
