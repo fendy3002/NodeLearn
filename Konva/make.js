@@ -10,6 +10,7 @@ window.stepProgress.make = function (containerId, option) {
             vSpace: 40,
             minStageHeight: 300,
             minStageWidth: 1000,
+            minPhaseWidth: 80,
             stageHeight: 300,
             stageWidth: 1000,
             paddingX: 20,
@@ -38,27 +39,6 @@ window.stepProgress.make = function (containerId, option) {
     }
     let startX = (make.option.paddingX + make.option.startX);
     let pointMap = {};
-    make.updatePhaseFromShadowPoint = (shadowPoint) => {
-        shadowPoint.phase.width = Math.max(shadowPoint.phase.width, shadowPoint.x);
-        if (shadowPoint.pointType != "parallel" && shadowPoint.pointType != "parallel_end") {
-            if (shadowPoint.next) {
-                make.updatePhaseFromShadowPoint(shadowPoint.next);
-            }
-        }
-        else if (shadowPoint.pointType == "parallel") {
-            for (let item of shadowPoint.items) {
-                make.updatePhaseFromShadowPoint(item);
-            }
-            if (shadowPoint.next) {
-                make.updatePhaseFromShadowPoint(shadowPoint.next);
-            }
-        }
-        else if (shadowPoint.pointType == "parallel_end") {
-            if (shadowPoint.next) {
-                make.updatePhaseFromShadowPoint(shadowPoint.next);
-            }
-        }
-    };
     make.renderShadowPoint = (shadowPoint, prevPoint) => {
         if (!shadowPoint.prev) {
             let startPoint = draw.start({
@@ -196,35 +176,59 @@ window.stepProgress.make = function (containerId, option) {
         }
         return shadowPoint;
     };
+    make.calculatePhaseWidth = (phase, point, currentWidth) => {
+        if (!point.prev) {
+            return currentWidth;
+        }
+        else if (point.pointType != "parallel_end" && point.prev.phase.index == phase.index) {
+            return make.calculatePhaseWidth(phase, point.prev, currentWidth + 1);
+        }
+        else if (point.pointType == "parallel_end") {
+            let maxWidth = 1;
+            for (let prev of point.prevs) {
+                let width = 0;
+                if (prev.phase.index == phase.index) {
+                    width++;
+                }
+                while (prev.prev.phase.index == phase.index && prev.prev.pointType != "parallel") {
+                    prev = prev.prev;
+                    width++;
+                }
+                maxWidth = Math.max(maxWidth, width);
+            }
+            if (point.prev.phase.index == phase.index) {
+                return make.calculatePhaseWidth(phase, point.prev, currentWidth + maxWidth + 1);
+            }
+            else {
+                return currentWidth + maxWidth;
+            }
+        }
+        return currentWidth;
+    };
     make.updatePhaseFromPointRelation = () => {
         for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
-            let idLengths = phase.member.map(k => k.split("_").length);
-            phase.minX = idLengths[0];
-            phase.maxX = idLengths[0];
-            for (let i = 1; i < idLengths.length; i++) {
-                phase.minX = Math.min(phase.minX, idLengths[i]);
-                phase.maxX = Math.max(phase.maxX, idLengths[i]);
+            let width = 1;
+            for (let pointId of phase.member) {
+                width = Math.max(make.calculatePhaseWidth(phase, pointMap[pointId], 1), width);
             }
-            phase.maxX++;
+            phase.width = Math.max(make.option.minPhaseWidth, (width * make.option.pointSpace) + (2 * make.option.phasePaddingX));
         }
-        let maxX = 0;
+        let leftX = startX + make.option.pointSpace;
         for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
-            if (phase.minX < maxX + 1) {
-                let width = phase.maxX - phase.minX;
-                phase.minX = maxX + 1;
-                phase.maxX = phase.minX + width;
+            if (leftX > phase.startX) {
+                phase.startX = leftX;
             }
-            maxX = phase.maxX;
+            leftX = phase.startX + phase.width + make.option.phaseSpace;
             for (let memberId of phase.member) {
                 let member = pointMap[memberId];
-                member.minX = phase.minX;
+                member.minX = phase.startX;
             }
         }
     };
     make.updateX = (point) => {
-        let minX = startX + (point.minX * make.option.pointSpace) + make.option.phaseSpace + make.option.phasePaddingX;
+        let minX = (point.minX) + make.option.phaseSpace + make.option.phasePaddingX;
         if (point.pointType != "parallel" && point.pointType != "parallel_end") {
             let prevX = 0;
             if (point.prev) {
@@ -307,15 +311,6 @@ window.stepProgress.make = function (containerId, option) {
             }
         }
     };
-    make.updatePhase = () => {
-        for (let phaseIndex of Object.keys(phaseContext)) {
-            let phase = phaseContext[phaseIndex]
-            let phaseStartX = startX + (phase.minX * make.option.pointSpace);
-            phase.startX = phaseStartX;
-            phase.width = startX + (phase.maxX * make.option.pointSpace) -
-                phaseStartX + (2 * make.option.phasePaddingX);
-        }
-    };
     make.renderPhase = () => {
         for (let phaseIndex of Object.keys(phaseContext)) {
             let phase = phaseContext[phaseIndex];
@@ -330,15 +325,12 @@ window.stepProgress.make = function (containerId, option) {
         make.updatePhaseFromPointRelation();
         make.updateX(pointRelation);
         make.updateY(pointRelation);
-        make.updatePhase();
 
-        let lastX = 0;
         let longestId = "";
 
         let stageRight = 0;
         let stageHeight = 0;
         for (let pointId of Object.keys(pointMap)) {
-            lastX = Math.max(lastX, pointMap[pointId].x);
             if (pointId.length > longestId.length) {
                 longestId = pointId;
             }
@@ -361,7 +353,7 @@ window.stepProgress.make = function (containerId, option) {
 
         let lastPoint = pointMap[longestId];
         let endPoint = draw.start({
-            x: lastX + (2 * make.option.pointSpace) + make.option.phaseSpace,
+            x: stageRight - make.option.startX - make.option.paddingX,
             y: make.option.paddingY + 80
         }, lastPoint.type);
         endPoint.setAttr("ptype", lastPoint.type);
