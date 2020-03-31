@@ -123,7 +123,7 @@ window.stepProgress.draw = function (option) {
                 labelY = pos.y;
             }
             else {
-
+                labelY = pos.y - label.height();
             }
             label.x(labelX);
             label.y(labelY);
@@ -146,6 +146,12 @@ window.stepProgress.draw = function (option) {
                         text: option.additionalText,
                     })
                 );
+
+                if (yDir == 't') {
+                    labelY = pos.y - label.height() - addLabel.height();
+                    label.y(labelY);
+                    addLabel.y(label.y() + label.height());
+                }
                 addLabel.hide();
             }
         }
