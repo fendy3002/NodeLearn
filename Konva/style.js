@@ -14,8 +14,14 @@ window.stepProgress.style = window.stepProgress.style || {};
             fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
             fontSize: 12,
             padding: 8,
-            width: 150,
+            width: 180,
             fontStyle: 'bold'
+        }
+    };
+    style.pointTextAdd = {
+        base: {
+            ...style.pointText.base,
+            fontStyle: 'normal'
         }
     };
     style.pointTextTag = {

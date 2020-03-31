@@ -94,27 +94,24 @@ window.stepProgress.draw = function (option) {
             yDir = 't';
         }
         let label = null;
+        let addLabel = null;
         if (option && option.text) {
             label = new Konva.Label({
                 x: 0,
                 y: 0,
-                opacity: 0.75
+                opacity: 0.85
             });
             label.add(
                 new Konva.Tag({
                     ...style.pointTextTag.base,
                 })
             );
-            let labelText = new Konva.Text({
-                ...style.pointText.base,
-                text: option.text,
-            });
             label.add(
-                labelText
+                new Konva.Text({
+                    ...style.pointText.base,
+                    text: option.text,
+                })
             );
-            if (option.additionalText) {
-
-            }
             let labelX; let labelY;
             if (xDir == 'l') {
                 labelX = pos.x + point.width() / 2 + useStyle.strokeWidth;
@@ -125,9 +122,32 @@ window.stepProgress.draw = function (option) {
             if (yDir == 'b') {
                 labelY = pos.y;
             }
+            else {
+
+            }
             label.x(labelX);
             label.y(labelY);
             label.hide();
+
+            if (option.additionalText) {
+                addLabel = new Konva.Label({
+                    x: labelX,
+                    y: label.y() + label.height(),
+                    opacity: 0.85
+                });
+                addLabel.add(
+                    new Konva.Tag({
+                        ...style.pointTextTag.base,
+                    })
+                );
+                addLabel.add(
+                    new Konva.Text({
+                        ...style.pointTextAdd.base,
+                        text: option.additionalText,
+                    })
+                );
+                addLabel.hide();
+            }
         }
 
         point.setAttr("ptype", type);
@@ -136,6 +156,9 @@ window.stepProgress.draw = function (option) {
             point.stroke(useHoverStyle.stroke);
             if (label) {
                 label.show();
+                if (addLabel) {
+                    addLabel.show();
+                }
             }
             draw.layerTooltip().draw();
             draw.layerPoint().draw();
@@ -145,6 +168,9 @@ window.stepProgress.draw = function (option) {
             point.stroke(useStyle.stroke);
             if (label) {
                 label.hide();
+                if (addLabel) {
+                    addLabel.hide();
+                }
             }
             draw.layerTooltip().draw();
             draw.layerPoint().draw();
@@ -152,6 +178,9 @@ window.stepProgress.draw = function (option) {
         draw.layerPoint().add(point);
         if (label) {
             draw.layerTooltip().add(label);
+            if (addLabel) {
+                draw.layerTooltip().add(addLabel);
+            }
         }
         return point;
     };
