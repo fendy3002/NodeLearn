@@ -9,6 +9,34 @@ window.stepProgress.style = window.stepProgress.style || {};
             strokeWidth: 6
         }
     };
+    style.pointText = {
+        base: {
+            fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+            fontSize: 12,
+            padding: 8,
+            width: 150,
+            fontStyle: 'bold'
+        }
+    };
+    style.pointTextTag = {
+        base: {
+            fill: '#FFFFFF'
+        }
+    };
+    style.phase = {
+        base: {
+            cornerRadius: 10,
+            fill: "#FFFFFF",
+        }
+    };
+    style.phaseText = {
+        base: {
+            fontSize: 12,
+            fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+            align: 'center',
+            fontStyle: 'bold'
+        }
+    };
 
     style.point.pending = {
         ...style.point.base,

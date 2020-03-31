@@ -52,7 +52,10 @@ window.stepProgress.make = function (containerId, option) {
             point = draw.point({
                 x: shadowPoint.x,
                 y: shadowPoint.y
-            }, shadowPoint.type);
+            }, shadowPoint.type, {
+                text: shadowPoint.name,
+                additionalText: shadowPoint.additionalText,
+            });
             shadowPoint.renderPoint = point;
             if (!shadowPoint.prev) {
                 draw.connect(make.__.start, point);
@@ -119,6 +122,8 @@ window.stepProgress.make = function (containerId, option) {
         let shadowPoint = {};
         shadowPoint.point = point;
         shadowPoint.type = point.type;
+        shadowPoint.name = point.name;
+        shadowPoint.additionalText = point.additionalText;
         shadowPoint.pointType = point.pointType;
         shadowPoint.phase = phaseContext[point.phase];
         if (prevPoint) {

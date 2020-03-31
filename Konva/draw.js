@@ -18,6 +18,7 @@ window.stepProgress.draw = function (option) {
                 bg: null,
                 phase: null,
                 point: null,
+                tooltip: null
             }
         }
     };
@@ -32,6 +33,7 @@ window.stepProgress.draw = function (option) {
             bg: new Konva.Layer(),
             phase: new Konva.Layer(),
             point: new Konva.Layer(),
+            tooltip: new Konva.Layer(),
         };
         for (let key of Object.keys(draw.__.layer)) {
             draw.__.stage.add(draw.__.layer[key]);
@@ -52,6 +54,9 @@ window.stepProgress.draw = function (option) {
     draw.layerPoint = () => {
         return draw.__.layer.point;
     };
+    draw.layerTooltip = () => {
+        return draw.__.layer.tooltip;
+    };
     draw.layerPhase = () => {
         return draw.__.layer.phase;
     };
@@ -71,7 +76,7 @@ window.stepProgress.draw = function (option) {
         draw.layerPoint().add(point);
         return point;
     };
-    draw.point = (pos, type) => {
+    draw.point = (pos, type, option) => {
         let useStyle = style.point[type];
         let useHoverStyle = style.point[type + "Hover"];
         let point = new Konva.Circle({
@@ -79,18 +84,75 @@ window.stepProgress.draw = function (option) {
             y: pos.y,
             ...useStyle
         });
+
+        let xDir = 'l';
+        let yDir = 'b';
+        if (pos.x > draw.stage().width() / 2) {
+            xDir = 'r';
+        }
+        if (pos.y > draw.stage().height() / 2) {
+            yDir = 't';
+        }
+        let label = null;
+        if (option && option.text) {
+            label = new Konva.Label({
+                x: 0,
+                y: 0,
+                opacity: 0.75
+            });
+            label.add(
+                new Konva.Tag({
+                    ...style.pointTextTag.base,
+                })
+            );
+            let labelText = new Konva.Text({
+                ...style.pointText.base,
+                text: option.text,
+            });
+            label.add(
+                labelText
+            );
+            if (option.additionalText) {
+
+            }
+            let labelX; let labelY;
+            if (xDir == 'l') {
+                labelX = pos.x + point.width() / 2 + useStyle.strokeWidth;
+            }
+            else {
+                labelX = pos.x - point.width() - useStyle.strokeWidth - label.width();
+            }
+            if (yDir == 'b') {
+                labelY = pos.y;
+            }
+            label.x(labelX);
+            label.y(labelY);
+            label.hide();
+        }
+
         point.setAttr("ptype", type);
         point.on("mouseenter", (evt) => {
             draw.stage().container().style.cursor = 'pointer';
             point.stroke(useHoverStyle.stroke);
+            if (label) {
+                label.show();
+            }
+            draw.layerTooltip().draw();
             draw.layerPoint().draw();
         });
         point.on("mouseout", (evt) => {
             draw.stage().container().style.cursor = 'default';
             point.stroke(useStyle.stroke);
+            if (label) {
+                label.hide();
+            }
+            draw.layerTooltip().draw();
             draw.layerPoint().draw();
         });
         draw.layerPoint().add(point);
+        if (label) {
+            draw.layerTooltip().add(label);
+        }
         return point;
     };
 
@@ -144,22 +206,18 @@ window.stepProgress.draw = function (option) {
     draw.phase = (fromX, width, text) => {
         let phaseHeight = draw.stage().height() - (2 * draw.option.paddingY) - draw.option.footerHeight;
         let phase = new Konva.Rect({
+            ...style.phase.base,
             x: fromX,
             y: draw.option.paddingY,
             width: width,
             height: phaseHeight,
-            cornerRadius: 10,
-            fill: "#FFFFFF",
         });
         let textShape = new Konva.Text({
+            ...style.phaseText.base,
             x: fromX,
             y: draw.option.paddingY + 14,
             width: width,
             text: text,
-            fontSize: 12,
-            fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-            align: 'center',
-            wrap: "none"
         });
 
         draw.layerPhase().add(phase);
