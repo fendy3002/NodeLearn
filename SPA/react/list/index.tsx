@@ -4,11 +4,12 @@ let mobx = require('mobx');
 let mobxReact = require('mobx-react');
 const moment = require('moment');
 const lo = require('lodash');
+import ListTable from './ListTable';
 // import validate from './validate'
 let { observer, inject } = mobxReact;
 
 @observer
-export default class App extends React.Component {
+export default class List extends React.Component {
     constructor(prop) {
         super(prop);
     }
@@ -20,11 +21,7 @@ export default class App extends React.Component {
         if(!store.posts || store.posts.length == 0){
             return <></>;
         }
-        console.log(store.posts);
-        let postsDom = store.posts.map((k, i) => {
-            return <li key = {i}>{k.title}</li>
-        });
         
-        return <ul>{postsDom}</ul>;
+        return <ListTable data={store.posts}></ListTable>;
     }
 };
