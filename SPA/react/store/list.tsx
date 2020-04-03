@@ -7,11 +7,15 @@ class ListStore {
         this.mainStore = mainStore;
     }
     apiPath = {
-
+        "get": "/api/posts"
     };
     mainStore;
+    @observable
+    posts = [];
     onPathChange(pathData) {
-        console.log(pathData);
+        sa.get(this.apiPath.get).then((data) => {
+            this.posts = data;
+        })
     }
 };
 export default ListStore;
