@@ -7,6 +7,11 @@ import listStore from './list';
 class Store {
     constructor(context) {
         this.context = context;
+        [
+            "onPathChange"
+        ].forEach((handler) => {
+            this[handler] = this[handler].bind(this);
+        });
         this.urlRouter = urlRouter({
             routes: [
                 {
@@ -39,7 +44,14 @@ class Store {
                     data: null,
                     callback: this.onPathChange
                 },
-            ]
+            ],
+            option: {
+                root: "/admin",
+                event: {
+                    historyChange: (data) => {
+                    }
+                }
+            }
         });
         this.urlRouter.refresh();
     }
@@ -58,13 +70,16 @@ class Store {
 
     lastRoute = null;
     onPathChange(data) {
-        if (this.lastRoute && this.lastRoute.label == data.label) {
+        if (this.lastRoute && this.lastRoute.label == data.route.label) {
             if (this.currentStore && this.currentStore.onPathChange) {
                 this.currentStore.onPathChange(data);
             }
         }
         else {
-            this.currentStore = this.storeMap[data.label](data);
+            this.currentStore = this.storeMap[data.route.label](data);
+            if (this.currentStore.onPathChange) {
+                this.currentStore.onPathChange(data);
+            }
         }
         this.lastRoute = data;
     }

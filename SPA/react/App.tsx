@@ -13,8 +13,13 @@ export default class App extends React.Component {
     constructor(prop) {
         super(prop);
     }
+    componentDidMount() {
+
+    }
     render() {
-        
-        return null;
+
+        return <>
+            APP
+        </>;
     }
 };

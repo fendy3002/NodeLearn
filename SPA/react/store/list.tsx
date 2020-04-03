@@ -11,7 +11,7 @@ class ListStore {
     };
     mainStore;
     onPathChange(pathData) {
-
+        console.log(pathData);
     }
 };
 export default ListStore;
