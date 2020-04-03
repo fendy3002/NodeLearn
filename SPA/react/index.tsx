@@ -11,9 +11,7 @@ import store from './store';
     let storeInstance = new store(context);
     ReactDOM.render(
         <MobxReact.Provider store={storeInstance}>
-            <MobxReact.Provider currentStore={storeInstance.currentStore}>
-                <App />
-            </MobxReact.Provider>,
+            <App />
         </MobxReact.Provider>,
         elem
     );

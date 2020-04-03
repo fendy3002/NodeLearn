@@ -71,15 +71,12 @@ class Store {
     lastRoute = null;
     onPathChange(data) {
         if (this.lastRoute && this.lastRoute.label == data.route.label) {
-            if (this.currentStore && this.currentStore.onPathChange) {
-                this.currentStore.onPathChange(data);
-            }
         }
         else {
             this.currentStore = this.storeMap[data.route.label](data);
-            if (this.currentStore.onPathChange) {
-                this.currentStore.onPathChange(data);
-            }
+        }
+        if (this.currentStore.onPathChange) {
+            this.currentStore.onPathChange(data);
         }
         this.lastRoute = data;
     }

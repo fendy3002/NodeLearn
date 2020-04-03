@@ -6,6 +6,7 @@ class ListStore {
     constructor(mainStore, pathData) {
         this.mainStore = mainStore;
     }
+    name = "list";
     apiPath = {
         "get": "/api/posts"
     };
@@ -13,8 +14,8 @@ class ListStore {
     @observable
     posts = [];
     onPathChange(pathData) {
-        sa.get(this.apiPath.get).then((data) => {
-            this.posts = data;
+        sa.get(this.apiPath.get).then((response) => {
+            this.posts = response.body;
         })
     }
 };

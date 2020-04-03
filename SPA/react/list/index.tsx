@@ -4,19 +4,9 @@ let mobx = require('mobx');
 let mobxReact = require('mobx-react');
 const moment = require('moment');
 const lo = require('lodash');
-
-import List from './list';
 // import validate from './validate'
 let { observer, inject } = mobxReact;
 
-let moduleMap = {
-    "list": (props: any) => {
-        return <List {...props}/>;
-    }
-};
-
-//import 'toastr/build/toastr.css';
-@inject("store")
 @observer
 export default class App extends React.Component {
     constructor(prop) {
@@ -26,13 +16,15 @@ export default class App extends React.Component {
 
     }
     render() {
-        let store = this.props.store;
-        let { currentStore } = store;
-
-        if (!currentStore) {
+        let { store } = this.props;
+        if(!store.posts || store.posts.length == 0){
             return <></>;
         }
-        let appModule = moduleMap[currentStore.name]({store: currentStore});
-        return appModule;
+        console.log(store.posts);
+        let postsDom = store.posts.map((k, i) => {
+            return <li key = {i}>{k.title}</li>
+        });
+        
+        return <ul>{postsDom}</ul>;
     }
 };
