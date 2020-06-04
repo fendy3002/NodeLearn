@@ -1,4 +1,5 @@
 import Redlock = require("redlock");
+import lo = require('lodash');
 
 export default async (redis) => {
     let redlock = new Redlock([redis], {
@@ -12,7 +13,7 @@ export default async (redis) => {
     let exec = (handle, keysArr) => {
         return async () => {
             let lockArr = [];
-            for (let key of keysArr) {
+            for (let key of lo.sortBy(keysArr)) {
                 let lock = await redlock.lock(`_L_${key}`, ttl);
                 lockArr.push(lock);
             }

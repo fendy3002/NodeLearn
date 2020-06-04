@@ -10,6 +10,7 @@
     "dev:action": "ts-node src/doAction.ts"
   },
   "dependencies": {
+    "lodash": "^4.17.15",
     "redis": "^3.0.2",
     "redlock": "^4.1.0",
     "ts-node": "^8.10.2",
