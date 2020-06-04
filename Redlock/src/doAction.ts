@@ -58,8 +58,7 @@ const spawn = async (lockIndex1, lockIndex2) => {
     .exec();
 }
 
-const doTask = async () => {
-    action = await actionRaw(client);
+const deadlock = async() => {
     let promises: any[] = [];
 
     promises.push(spawn(1, 2));
@@ -72,7 +71,25 @@ const doTask = async () => {
     promises.push(spawn(2, 1));
     await Promise.all(promises);
     promises = [];
+};
 
+const allToOne = async() => {
+    let promises: any[] = [];
+
+    promises.push(spawn(3, 1));
+    promises.push(spawn(4, 1));
+    promises.push(spawn(5, 1));
+    promises.push(spawn(6, 1));
+    promises.push(spawn(7, 1));
+    promises.push(spawn(8, 1));
+    promises.push(spawn(1, 2));
+    promises.push(spawn(2, 1));
+    await Promise.all(promises);
+    promises = [];
+};
+
+const randomSpawn = async() => {
+    let promises: any[] = [];
     for (let loop = 0; loop < 20; loop++) {
         for (let i = 0; i < 100; i++) {
             let lockIndex1 = getRandomInt(0, lockArr.length - 1);
@@ -82,5 +99,13 @@ const doTask = async () => {
         await Promise.all(promises);
         promises = [];
     }
+};
+
+const doTask = async () => {
+    action = await actionRaw(client);
+    
+    await allToOne();
+    await deadlock();
+    await randomSpawn();
 };
 doTask();
