@@ -62,16 +62,16 @@ const doTask = async () => {
     action = await actionRaw(client);
     let promises: any[] = [];
 
-    // promises.push(spawn(1, 2));
-    // promises.push(spawn(2, 1));
-    // promises.push(spawn(1, 2));
-    // promises.push(spawn(2, 1));
-    // promises.push(spawn(1, 2));
-    // promises.push(spawn(2, 1));
-    // promises.push(spawn(1, 2));
-    // promises.push(spawn(2, 1));
-    // await Promise.all(promises);
-    // promises = [];
+    promises.push(spawn(1, 2));
+    promises.push(spawn(2, 1));
+    promises.push(spawn(1, 2));
+    promises.push(spawn(2, 1));
+    promises.push(spawn(1, 2));
+    promises.push(spawn(2, 1));
+    promises.push(spawn(1, 2));
+    promises.push(spawn(2, 1));
+    await Promise.all(promises);
+    promises = [];
 
     for (let loop = 0; loop < 20; loop++) {
         for (let i = 0; i < 100; i++) {
