@@ -7,7 +7,8 @@
     "debug": "LEVEL=DEBUG ts-node src/index.ts",
     "dev": "ts-node src/index.ts",
     "debug:action": "LEVEL=DEBUG ts-node src/doAction.ts",
-    "dev:action": "ts-node src/doAction.ts"
+    "dev:action": "ts-node src/doAction.ts",
+    "dev:multi": "ts-node src/multiredlock.ts"
   },
   "dependencies": {
     "lodash": "^4.17.15",
