@@ -18,8 +18,7 @@ let sourceText = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/so
 
 let doTask = async () => {
     let xmlParser = new xml2js.Parser({
-        tagNameProcessors: [xml2js.processors.stripPrefix],
-        stripPrefix: true
+        tagNameProcessors: [xml2js.processors.stripPrefix]
     });
     let parsedText = await xmlParser.parseStringPromise(sourceText);
     console.log(JSON.stringify(parsedText, null, 2));
