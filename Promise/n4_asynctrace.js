@@ -17,6 +17,19 @@ let thirdLevelError2 = () => {
     return firstLevelError();
 };
 
+let returnTask = async() => {
+    return 1;
+};
+let firstLevelReturn = async() => {
+    return await returnTask();
+};
+let secondLevelReturn = async() => {
+    return firstLevelReturn();
+};
+let thirdLevelReturn = () => {
+    return secondLevelReturn();
+};
+
 let doTask = async () => {
     try {
         await thirdLevelError();
@@ -28,5 +41,6 @@ let doTask = async () => {
     } catch (ex) {
         console.log(ex);
     }
+    console.log(await thirdLevelReturn());
 };
 doTask();
