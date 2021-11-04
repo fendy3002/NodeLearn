@@ -1,13 +1,10 @@
+import { serialize } from 'cookie';
 import React from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 class Home extends React.Component {
-    static async getServerSideProps(ctx) {
-        return {};
-    }
-
     render() {
         return (
             <div className={styles.container}>
