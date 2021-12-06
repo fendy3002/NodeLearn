@@ -1,30 +1,47 @@
 import * as sa from 'superagent';
-let token = "";
-let decrypted: any = null;
-let expires_in = 0;
+export interface TokenResponse {
+    access_token: string,
+    token_type: 'Bearer',
+    expires_in: number,
+    scope: string
+};
 
-let service = {
-    current: () => {
-        return {
-            token: token,
-            decrypted: decrypted
-        };
-    },
-    get: async () => {
-        let clientId = "9b3d3ef2-4832-4ec3-8b4b-1ce1adad9aa1";
-        let clientSecret = "7633b9d9-20cb-4205-929d-186281e6e509";
+export const auth = (config: any) => {
+    let token = "";
+    let expires_in = 0;
+
+    let getFromServer = async () => {
+        let clientId = config.bank.bank014.oauthId;
+        let clientSecret = config.bank.bank014.oauthSecret;
 
         let basicToken = Buffer.from(clientId + ":" + clientSecret).toString("base64");
-        const authToken = await sa.post("http://sandbox.bca.co.id/api/oauth/token")
+        const postResponse = await sa.post(config.bank.bank014.apiEndpoint.oauthToken)
             .type("form")
             .set("Authorization", "Basic " + basicToken)
             .send({
                 "grant_type": "client_credentials"
             });
+        let tokenResponse: TokenResponse = postResponse.body;
 
-        return authToken.body;
-    }
-};
-service.get().then((res) => {
-    console.log(res)
-});
+        token = tokenResponse.access_token;
+        expires_in = Math.floor(new Date().getTime() / 1000) + tokenResponse.expires_in;
+
+        return {
+            token: token,
+        };
+    };
+
+    return {
+        get: async () => {
+            // if already expired
+            if (expires_in < Math.floor(new Date().getTime() / 1000)) {
+                return await getFromServer();
+            }
+            else {
+                return {
+                    token: token,
+                };
+            }
+        }
+    };
+}
