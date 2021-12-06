@@ -28,4 +28,6 @@ const config = {
 
 getBankAccountNameRaw(config)("014", "0201245501").then((resp) => {
     console.log(resp)
+}).catch((err) => {
+    console.log(err);
 })
