@@ -4,7 +4,7 @@
   "semi": true,
   "printWidth": 80,
   "importOrderParserPlugins": ["classProperties", "decorators-legacy", "typescript", "jsx"],
-  "importOrder": ["<THIRD_PARTY_MODULES>", "^[./]"],
+  "importOrder": ["^react$", "(^@mui/(.*))|(^next(.*))", "<THIRD_PARTY_MODULES>", "src/(.*)$", "_/(.*)$|_(.*)/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

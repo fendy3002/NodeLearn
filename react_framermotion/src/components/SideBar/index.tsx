@@ -1,12 +1,11 @@
 import React from 'react';
+
 import Drawer from '@mui/material/Drawer';
 
-const drawerWidth = 240;
-export interface SidebarProps {
-  open: boolean;
-}
+import { SideBarProps } from '_/types/props/SideBarProps';
 
-export default function Sidebar(props: SidebarProps) {
+const drawerWidth = 240;
+export const SideBar = (props: SideBarProps) => {
   return (
     <Drawer
       sx={{
@@ -24,4 +23,4 @@ export default function Sidebar(props: SidebarProps) {
       MENU
     </Drawer>
   );
-}
+};

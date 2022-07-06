@@ -1,14 +1,16 @@
 import { Box, Card, CardContent } from '@mui/material';
 import { motion } from 'framer-motion';
 import './App.css';
+import { AppBar } from './components/AppBar';
 import { Button } from './components/Button';
-import Sidebar from './components/Sidebar';
+import { SideBar } from './components/SideBar';
 
 function App() {
   return (
     <>
+      <AppBar />
       <Box sx={{ display: 'flex' }}>
-        <Sidebar open={true}></Sidebar>
+        <SideBar open={true}></SideBar>
         <Box sx={{ width: '100%' }}>
           <Card>
             <CardContent
