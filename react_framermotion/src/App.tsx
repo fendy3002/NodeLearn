@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 
 import './App.css';
 import { AppBar } from './components/AppBar';
+import { ContactMe } from './components/ContactMe';
 import { Introduction } from './components/Introduction';
+import { Projects } from './components/Projects';
 import { SideBar } from './components/SideBar';
 import { Skills } from './components/Skills';
+import { WorkExperiences } from './components/WorkExperiences';
 import { FONT_COLOR_1 } from './constants/colors';
 
 function App() {
@@ -26,9 +29,12 @@ function App() {
         <AppBar />
         <Introduction />
         <Skills />
+        <WorkExperiences />
+        <Projects />
+        <ContactMe />
       </div>
 
-      <div style={{ marginTop: '1700px' }}></div>
+      <div style={{ marginTop: '400px' }}></div>
       {/* 
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ width: '100%' }}>
