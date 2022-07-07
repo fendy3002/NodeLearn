@@ -19,15 +19,32 @@ const StyledAppBarContainer = styled.div`
     rgba(0, 0, 0, 0.1) 50%,
     rgba(255, 255, 255, 0) 100%
   );
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 
   & a:not(:last-child) {
     margin-right: 32px;
   }
 `;
 
+const StyledMotionA = styled(motion.a)`
+  font-size: 1.2em;
+  color: inherit;
+  text-decoration: none;
+  text-shadow: 2px 2px 4px #000;
+
+  @media (min-width: 900px) {
+    font-size: 2em;
+  }
+  @media (min-width: 600px) and (max-width: 800px) {
+    font-size: 1.4em;
+  }
+`;
+
 const A = (props: { href: string; children?: any }) => {
   return (
-    <motion.a
+    <StyledMotionA
       whileHover={{
         filter: [
           'brightness(100%)',
@@ -43,24 +60,18 @@ const A = (props: { href: string; children?: any }) => {
       }}
       initial={{
         filter: 'brightness(100%)',
-        fontSize: '2em',
-      }}
-      style={{
-        fontSize: '2em',
-        color: 'inherit',
-        textDecoration: 'none',
-        textShadow: '2px 2px 4px #000',
       }}
       href={props.href}
     >
       {props.children}
-    </motion.a>
+    </StyledMotionA>
   );
 };
 
 export const AppBar = (props: AppBarProps) => {
   return (
     <StyledAppBarContainer>
+      <A href={'#'}>Introduction</A>&nbsp;&nbsp;
       <A href={'#'}>Skills</A>&nbsp;&nbsp;
       <A href={'#'}>Projects</A>&nbsp;&nbsp;
       <A href={'#'}>Contact me</A>
