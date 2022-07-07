@@ -27,7 +27,7 @@ const StyledRating = styled(Rating)({
 });
 const SkillBox = styled(Box)`
   & .skill {
-    margin: 12px auto;
+    margin: 24px auto 12px auto;
   }
 `;
 
@@ -94,7 +94,7 @@ export const Skills = (props: SkillsProps) => {
       >
         <SkillBox
           sx={{
-            background: `${BEIGE_900}`,
+            background: BEIGE_900,
             boxShadow: `inset 0px 0px 10px 10px ${BG_COLOR_1}`,
             padding: '32px',
             borderRadius: '20px',
