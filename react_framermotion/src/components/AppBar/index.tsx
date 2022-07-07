@@ -75,8 +75,8 @@ export const AppBar = (props: AppBarProps) => {
       <A href={'#introduction'}>Introduction</A>&nbsp;&nbsp;
       <A href={'#skills'}>Skills</A>&nbsp;&nbsp;
       <A href={'#work_experiences'}>Work Experiences</A>&nbsp;&nbsp;
-      <A href={'#'}>Projects</A>&nbsp;&nbsp;
-      <A href={'#'}>Contact me</A>
+      <A href={'#projects'}>Projects</A>&nbsp;&nbsp;
+      <A href={'#contact_me'}>Contact me</A>
     </StyledAppBarContainer>
   );
 };

@@ -174,6 +174,21 @@ export const SideBar = (props: SideBarProps) => {
                   SKILLS
                 </ListItemButton>
               </ListItem>
+              <ListItem>
+                <ListItemButton component={Link} href="#work_experiences">
+                  WORK EXPERIENCES
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton component={Link} href="#projects">
+                  PROJECTS
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton component={Link} href="#contact_me">
+                  CONTACT ME
+                </ListItemButton>
+              </ListItem>
             </Box>
           </motion.div>
         </motion.nav>
