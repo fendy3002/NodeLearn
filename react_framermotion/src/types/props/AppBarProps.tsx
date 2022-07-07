@@ -1,3 +1,1 @@
-export interface AppBarProps {
-  openSideBar: () => void;
-}
+export interface AppBarProps {}

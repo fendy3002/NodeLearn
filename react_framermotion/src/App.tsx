@@ -1,13 +1,9 @@
-import { useState } from 'react';
-
-import { Box, Card, CardContent } from '@mui/material';
-
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 
 import './App.css';
 import { AppBar } from './components/AppBar';
-import { Button } from './components/Button';
 import { SideBar } from './components/SideBar';
+import { FONT_COLOR_1 } from './constants/colors';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -15,7 +11,7 @@ function App() {
   });
   return (
     <>
-      <div style={{ color: '#613C30' }}>
+      <div style={{ color: FONT_COLOR_1, fontFamily: 'Lato, Arial' }}>
         <SideBar
           open={appState.sideBarOpen}
           openSideBar={() =>
@@ -25,14 +21,11 @@ function App() {
             setAppState((prev) => ({ ...prev, sideBarOpen: false }))
           }
         ></SideBar>
+        <AppBar />
       </div>
 
       <div style={{ marginTop: '1700px' }}></div>
-      {/* <AppBar
-        openSideBar={() => {
-          setAppState((prev) => ({ ...prev, sideBarOpen: true }));
-        }}
-      />
+      {/* 
       <Box sx={{ display: 'flex' }}>
         <Box sx={{ width: '100%' }}>
           <Card>

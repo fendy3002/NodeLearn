@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
-import { Close } from '@mui/icons-material';
-import { Box, Divider, IconButton, Typography } from '@mui/material';
-import Drawer from '@mui/material/Drawer';
+import { Box, Divider } from '@mui/material';
 
 import { motion } from 'framer-motion';
 
 import { SideBarProps } from '_/types/props/SideBarProps';
 
+import { FONT_COLOR_1 } from '../../constants/colors';
+import { MENU_CUTOFF_Y } from '../../constants/positions';
+
 const Path = (props: any) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#613C30"
+    stroke={FONT_COLOR_1}
     strokeLinecap="round"
     {...props}
   />
@@ -23,6 +24,9 @@ export const SideBar = (props: SideBarProps) => {
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
+    if (position < MENU_CUTOFF_Y) {
+      props.closeSideBar();
+    }
   };
 
   useEffect(() => {
@@ -41,7 +45,7 @@ export const SideBar = (props: SideBarProps) => {
         opacity: 0,
       }}
       animate={{
-        ...(scrollPosition > 100
+        ...(scrollPosition > MENU_CUTOFF_Y
           ? {
               visibility: 'visible',
               opacity: 1,
