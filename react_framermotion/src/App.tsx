@@ -15,16 +15,20 @@ function App() {
   });
   return (
     <>
-      <SideBar
-        open={appState.sideBarOpen}
-        openSideBar={() =>
-          setAppState((prev) => ({ ...prev, sideBarOpen: true }))
-        }
-        closeSideBar={() =>
-          setAppState((prev) => ({ ...prev, sideBarOpen: false }))
-        }
-      ></SideBar>
-      <AppBar
+      <div style={{ color: '#613C30' }}>
+        <SideBar
+          open={appState.sideBarOpen}
+          openSideBar={() =>
+            setAppState((prev) => ({ ...prev, sideBarOpen: true }))
+          }
+          closeSideBar={() =>
+            setAppState((prev) => ({ ...prev, sideBarOpen: false }))
+          }
+        ></SideBar>
+      </div>
+
+      <div style={{ marginTop: '1700px' }}></div>
+      {/* <AppBar
         openSideBar={() => {
           setAppState((prev) => ({ ...prev, sideBarOpen: true }));
         }}
@@ -78,7 +82,7 @@ function App() {
             </CardContent>
           </Card>
         </Box>
-      </Box>
+      </Box> */}
     </>
   );
 }
