@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import './App.css';
 import { AppBar } from './components/AppBar';
+import { Introduction } from './components/Introduction';
 import { SideBar } from './components/SideBar';
 import { Skills } from './components/Skills';
 import { FONT_COLOR_1 } from './constants/colors';
@@ -23,7 +24,8 @@ function App() {
           }
         />
         <AppBar />
-        <Skills></Skills>
+        <Introduction />
+        <Skills />
       </div>
 
       <div style={{ marginTop: '1700px' }}></div>

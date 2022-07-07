@@ -12,7 +12,7 @@ const StyledAppBarContainer = styled.div`
   color: ${GREY_900};
   padding-top: 10px;
   text-transform: uppercase;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.3) 0%,
@@ -59,6 +59,7 @@ const A = (props: { href: string; children?: any }) => {
         },
       }}
       initial={{
+        marginTop: '10px',
         filter: 'brightness(100%)',
       }}
       href={props.href}
@@ -71,8 +72,9 @@ const A = (props: { href: string; children?: any }) => {
 export const AppBar = (props: AppBarProps) => {
   return (
     <StyledAppBarContainer>
-      <A href={'#'}>Introduction</A>&nbsp;&nbsp;
-      <A href={'#'}>Skills</A>&nbsp;&nbsp;
+      <A href={'#introduction'}>Introduction</A>&nbsp;&nbsp;
+      <A href={'#skills'}>Skills</A>&nbsp;&nbsp;
+      <A href={'#'}>Work Experience</A>&nbsp;&nbsp;
       <A href={'#'}>Projects</A>&nbsp;&nbsp;
       <A href={'#'}>Contact me</A>
     </StyledAppBarContainer>

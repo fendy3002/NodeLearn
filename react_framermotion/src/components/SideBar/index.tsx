@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, ClickAwayListener, Divider } from '@mui/material';
+import {
+  Box,
+  ClickAwayListener,
+  Divider,
+  Link,
+  ListItem,
+  ListItemButton,
+} from '@mui/material';
 
 import { motion } from 'framer-motion';
 
@@ -77,7 +84,7 @@ export const SideBar = (props: SideBarProps) => {
                 },
               },
               closed: {
-                clipPath: 'circle(25px at 36px 32px)',
+                clipPath: 'circle(25px at 36px 36px)',
                 transition: {
                   delay: 0.5,
                   type: 'spring',
@@ -104,11 +111,13 @@ export const SideBar = (props: SideBarProps) => {
                 props.open ? props.closeSideBar() : props.openSideBar()
               }
               style={{
-                top: '20px',
+                top: '25px',
                 left: '21px',
                 position: 'absolute',
                 borderRadius: '50%',
                 border: 0,
+                marginTop: '-4px',
+                padding: '5px',
                 background: 'transparent',
                 cursor: 'pointer',
                 zIndex: 11,
@@ -154,7 +163,18 @@ export const SideBar = (props: SideBarProps) => {
               </h1>
             </div>
             <Divider />
-            <Box></Box>
+            <Box>
+              <ListItem>
+                <ListItemButton component={Link} href="#introduction">
+                  INTRODUCTION
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton component={Link} href="#skills">
+                  SKILLS
+                </ListItemButton>
+              </ListItem>
+            </Box>
           </motion.div>
         </motion.nav>
       </motion.div>
