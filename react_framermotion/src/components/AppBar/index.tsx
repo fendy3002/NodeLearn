@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { AppBarProps } from '_/types/props/AppBarProps';
 
 import { GREY_900 } from '../../constants/colors';
+import { BREAKPOINT_MD, BREAKPOINT_SM } from '../../constants/positions';
 
 const StyledAppBarContainer = styled.div`
   text-align: center;
@@ -23,7 +24,7 @@ const StyledAppBarContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 
-  @media (min-width: 600px) {
+  @media (min-width: ${BREAKPOINT_SM}px) {
     & a:not(:last-child) {
       margin-right: 32px;
     }
@@ -37,11 +38,11 @@ const StyledMotionA = styled(motion.a)`
   text-decoration: none;
   text-shadow: 2px 2px 4px #000;
 
-  @media (min-width: 900px) {
+  @media (min-width: ${BREAKPOINT_MD}px) {
     flex-basis: auto;
     font-size: 2em;
   }
-  @media (min-width: 600px) and (max-width: 800px) {
+  @media (min-width: ${BREAKPOINT_SM}px) and (max-width: ${BREAKPOINT_MD}px) {
     flex-basis: auto;
     font-size: 1.4em;
   }

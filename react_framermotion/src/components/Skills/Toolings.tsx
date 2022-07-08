@@ -2,6 +2,24 @@ import React from 'react';
 
 import { Box, List, ListItem, Typography } from '@mui/material';
 
+import styled from 'styled-components';
+
+import { BREAKPOINT_SM } from '../../constants/positions';
+
+const StyledList = styled(List)`
+  display: flex;
+  flex-wrap: wrap';
+  & li {
+    flex-basis: 100%;
+  }
+
+  @media (min-width: ${BREAKPOINT_SM}px) {
+    & li {
+      flex-basis: 10%;
+    }
+  }
+`;
+
 export const Toolings = () => {
   return (
     <>
@@ -25,7 +43,7 @@ export const Toolings = () => {
             fontSize: '1.2em',
           }}
         >
-          <List style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <StyledList>
             <ListItem>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +153,7 @@ export const Toolings = () => {
               <span style={{ width: '10px' }}></span>
               rabbitmq
             </ListItem>
-          </List>
+          </StyledList>
         </Box>
       </Box>
     </>
