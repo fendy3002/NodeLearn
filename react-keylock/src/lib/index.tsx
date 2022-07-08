@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+const dynamicJS = require('dynamics.js');
+
 const number = [8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2];
 
 const oneNumberHeight = (size: 'small' | 'medium') =>
@@ -118,10 +120,22 @@ export const KeylockNumberSet = (props: {
       const current = containerRef.current as any;
       const topValue =
         (offsetNumber + props.selectedNumber) * oneNumberHeight(props.size);
-      // current.style.top = `${
-      //
-      // } px`;
-      current.style.setProperty('top', `-${topValue}px`);
+
+      if (current.selectedNumber != props.selectedNumber) {
+        dynamicJS.animate(
+          current,
+          {
+            top: -topValue,
+          },
+          {
+            type: dynamicJS.spring,
+            frequency: 200,
+            friction: 200,
+            duration: 1500,
+          },
+        );
+      }
+      current.selectedNumber = props.selectedNumber;
     }
   }, [containerRef.current, props.selectedNumber]);
   console.log(props.size);
