@@ -75,6 +75,7 @@ export const KeylockNumber = (props: {
 export const KeylockNumberSet = (props: {
   position: number;
   initialNumber: number;
+  onNumberChange: (number: number) => void;
 }) => {
   const containerRef = useRef(null);
   const startMove = () => {
@@ -85,15 +86,15 @@ export const KeylockNumberSet = (props: {
     const current = containerRef.current as any;
     const currentTop = parseInt(current.style.top.replace('px', ''));
     let currentlySelectedNumber =
-      -offsetNumber + Math.abs(currentTop) / oneNumberHeight;
+      (10 - offsetNumber + Math.abs(currentTop) / oneNumberHeight) % 10;
     if (currentlySelectedNumber - Math.floor(currentlySelectedNumber) > 0.5) {
       currentlySelectedNumber += 1;
     }
     currentlySelectedNumber = Math.floor(currentlySelectedNumber);
-
     current.style.top = `-${
       (offsetNumber + currentlySelectedNumber) * oneNumberHeight
     }px`;
+    props.onNumberChange(Math.abs(currentlySelectedNumber));
   };
   const moveY = (deltaY: number) => {
     const current = containerRef.current as any;
@@ -146,6 +147,18 @@ export const KeylockNumberSet = (props: {
 };
 export const Keylock = () => {
   const [stateNumber, setStateNumber] = useState('948175');
+  const handleNumberChange = (index: number) => (number: number) => {
+    setStateNumber((prev) => {
+      const newStateNumber = [
+        ...prev.split('').slice(0, index),
+        number.toString(),
+        ...prev.split('').slice(index + 1),
+      ].join('');
+
+      console.log(newStateNumber);
+      return newStateNumber;
+    });
+  };
   return (
     <>
       <div
@@ -165,30 +178,14 @@ export const Keylock = () => {
             position: 'relative',
           }}
         >
-          <KeylockNumberSet
-            position={1}
-            initialNumber={parseInt(stateNumber[0])}
-          />
-          <KeylockNumberSet
-            position={2}
-            initialNumber={parseInt(stateNumber[1])}
-          />
-          <KeylockNumberSet
-            position={3}
-            initialNumber={parseInt(stateNumber[2])}
-          />
-          <KeylockNumberSet
-            position={4}
-            initialNumber={parseInt(stateNumber[3])}
-          />
-          <KeylockNumberSet
-            position={5}
-            initialNumber={parseInt(stateNumber[4])}
-          />
-          <KeylockNumberSet
-            position={6}
-            initialNumber={parseInt(stateNumber[5])}
-          />
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <KeylockNumberSet
+              key={i}
+              position={i + 1}
+              initialNumber={parseInt(stateNumber[i])}
+              onNumberChange={handleNumberChange(i)}
+            />
+          ))}
         </div>
       </div>
     </>
