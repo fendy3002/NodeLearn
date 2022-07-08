@@ -81,7 +81,7 @@ export const KeylockNumberSet = (props: {
   position: number;
   size: 'small' | 'medium';
   readonly: boolean;
-  initialNumber: number;
+  selectedNumber: number;
   onNumberChange: (number: number) => void;
 }) => {
   const containerRef = useRef(null);
@@ -117,13 +117,13 @@ export const KeylockNumberSet = (props: {
     if (containerRef.current) {
       const current = containerRef.current as any;
       const topValue =
-        (offsetNumber + props.initialNumber) * oneNumberHeight(props.size);
+        (offsetNumber + props.selectedNumber) * oneNumberHeight(props.size);
       // current.style.top = `${
       //
       // } px`;
       current.style.setProperty('top', `-${topValue}px`);
     }
-  }, [containerRef.current]);
+  }, [containerRef.current, props.selectedNumber]);
   console.log(props.size);
   return (
     <div
@@ -158,7 +158,7 @@ export const KeylockNumberSet = (props: {
   );
 };
 export const Keylock = (props: {
-  initialNumber: string;
+  selectedNumber: string;
   readonly: boolean;
   onChange: (newNumber: string) => void;
   size?: 'small' | 'medium';
@@ -167,9 +167,9 @@ export const Keylock = (props: {
 
   useEffect(() => {
     if (containerRef.current) {
-      (containerRef.current as any).selectedNumber = props.initialNumber;
+      (containerRef.current as any).selectedNumber = props.selectedNumber;
     }
-  }, [containerRef.current]);
+  }, [containerRef.current, props.selectedNumber]);
 
   const handleNumberChange = (index: number) => (number: number) => {
     const current = containerRef.current as any;
@@ -206,13 +206,13 @@ export const Keylock = (props: {
             position: 'relative',
           }}
         >
-          {props.initialNumber.split('').map((n, i) => (
+          {props.selectedNumber.split('').map((n, i) => (
             <KeylockNumberSet
               size={props.size ?? 'medium'}
               readonly={props.readonly}
               key={i}
               position={i + 1}
-              initialNumber={parseInt(n)}
+              selectedNumber={parseInt(n)}
               onNumberChange={handleNumberChange(i)}
             />
           ))}

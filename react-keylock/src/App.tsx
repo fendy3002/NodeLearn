@@ -10,14 +10,14 @@ function App() {
       <div style={{ marginTop: '400px' }}></div>
       <div style={{}}>
         <Keylock
-          initialNumber={selectedNumber}
+          selectedNumber={selectedNumber}
           readonly={selectedNumber == '00000000'}
           onChange={setSelectedNumber}
         />
 
         <Keylock
           size="small"
-          initialNumber={selectedNumber}
+          selectedNumber={selectedNumber}
           readonly={selectedNumber == '00000000'}
           onChange={setSelectedNumber}
         />
