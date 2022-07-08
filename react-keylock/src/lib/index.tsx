@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const number = [8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2];
 
-const oneNumberHeight = 94;
-const oneLoopHeight = oneNumberHeight * 10;
+const oneNumberHeight = (size: 'small' | 'medium') =>
+  size == 'small' ? 49 : 94;
+const oneLoopHeight = (size: 'small' | 'medium') => oneNumberHeight(size) * 10;
 const offsetNumber = 2;
 
 export const KeylockNumber = (props: {
   position: number;
+  size: 'small' | 'medium';
   number: number;
   readonly: boolean;
   startMove: () => void;
@@ -58,7 +60,7 @@ export const KeylockNumber = (props: {
       ref={containerRef}
       style={{
         cursor: 'grab',
-        width: '80px',
+        width: props.size == 'small' ? '40px' : '80px',
         textAlign: 'center',
         userSelect: 'none',
         borderBottom: '1px #DDD solid',
@@ -77,6 +79,7 @@ export const KeylockNumber = (props: {
 };
 export const KeylockNumberSet = (props: {
   position: number;
+  size: 'small' | 'medium';
   readonly: boolean;
   initialNumber: number;
   onNumberChange: (number: number) => void;
@@ -90,41 +93,43 @@ export const KeylockNumberSet = (props: {
     const current = containerRef.current as any;
     const currentTop = parseInt(current.style.top.replace('px', ''));
     let currentlySelectedNumber =
-      (10 - offsetNumber + Math.abs(currentTop) / oneNumberHeight) % 10;
+      (10 - offsetNumber + Math.abs(currentTop) / oneNumberHeight(props.size)) %
+      10;
     if (currentlySelectedNumber - Math.floor(currentlySelectedNumber) > 0.5) {
       currentlySelectedNumber += 1;
       currentlySelectedNumber = currentlySelectedNumber % 10;
     }
     currentlySelectedNumber = Math.floor(currentlySelectedNumber);
     current.style.top = `-${
-      (offsetNumber + currentlySelectedNumber) * oneNumberHeight
+      (offsetNumber + currentlySelectedNumber) * oneNumberHeight(props.size)
     }px`;
     props.onNumberChange(Math.abs(currentlySelectedNumber));
   };
   const moveY = (deltaY: number) => {
     const current = containerRef.current as any;
-    let topAfterMove = (current.startTop - deltaY) % oneLoopHeight;
+    let topAfterMove = (current.startTop - deltaY) % oneLoopHeight(props.size);
     if (topAfterMove > 0) {
-      topAfterMove -= oneLoopHeight;
+      topAfterMove -= oneLoopHeight(props.size);
     }
     current.style.top = `${topAfterMove}px`;
   };
   useEffect(() => {
     if (containerRef.current) {
       const current = containerRef.current as any;
-      const topValue = (offsetNumber + props.initialNumber) * oneNumberHeight;
+      const topValue =
+        (offsetNumber + props.initialNumber) * oneNumberHeight(props.size);
       // current.style.top = `${
       //
       // } px`;
       current.style.setProperty('top', `-${topValue}px`);
     }
   }, [containerRef.current]);
-
+  console.log(props.size);
   return (
     <div
       style={{
-        width: '80px',
-        fontSize: '80px',
+        width: props.size == 'small' ? '40px' : '80px',
+        fontSize: props.size == 'small' ? '40px' : '80px',
         position: 'relative',
         marginRight: '2px',
         marginLeft: '2px',
@@ -138,6 +143,7 @@ export const KeylockNumberSet = (props: {
       >
         {number.map((n, i) => (
           <KeylockNumber
+            size={props.size}
             readonly={props.readonly}
             key={`${props.position}.${i}`}
             position={props.position}
@@ -155,6 +161,7 @@ export const Keylock = (props: {
   initialNumber: string;
   readonly: boolean;
   onChange: (newNumber: string) => void;
+  size?: 'small' | 'medium';
 }) => {
   const containerRef = useRef(null);
 
@@ -181,7 +188,10 @@ export const Keylock = (props: {
       <div
         style={{
           display: 'inline-block',
-          border: '4px #E9E9E9 solid',
+          borderTop: '8px #E9E9E9 solid',
+          borderBottom: '8px #E9E9E9 solid',
+          borderLeft: '16px #E9E9E9 solid',
+          borderRight: '16px #E9E9E9 solid',
         }}
         ref={containerRef}
       >
@@ -191,13 +201,14 @@ export const Keylock = (props: {
             paddingBottom: '8px',
             display: 'flex',
             fontFamily: 'Courier New',
-            height: `${oneNumberHeight}px`,
+            height: `${oneNumberHeight(props.size ?? 'medium')}px`,
             overflow: 'hidden',
             position: 'relative',
           }}
         >
           {props.initialNumber.split('').map((n, i) => (
             <KeylockNumberSet
+              size={props.size ?? 'medium'}
               readonly={props.readonly}
               key={i}
               position={i + 1}

@@ -4,14 +4,21 @@ import './App.css';
 import { Keylock } from './lib';
 
 function App() {
-  const [selectedNumber, setSelectedNumber] = useState('000001'); //943178
+  const [selectedNumber, setSelectedNumber] = useState('00000001'); //943178
   return (
     <>
       <div style={{ marginTop: '400px' }}></div>
       <div style={{}}>
         <Keylock
           initialNumber={selectedNumber}
-          readonly={selectedNumber == '000000'}
+          readonly={selectedNumber == '00000000'}
+          onChange={setSelectedNumber}
+        />
+
+        <Keylock
+          size="small"
+          initialNumber={selectedNumber}
+          readonly={selectedNumber == '00000000'}
           onChange={setSelectedNumber}
         />
       </div>
