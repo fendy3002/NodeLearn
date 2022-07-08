@@ -20,6 +20,50 @@ export const WorkExperienceTimeline = () => {
             company="FWD Insurance"
             location="Singapore office (remote from Indonesia)"
             when="Mar 2022 - Jul 2022"
+            detail={
+              <div>
+                <p>Responsibilities:</p>
+                <ul>
+                  <li>Develop frontend react application pages with NextJS</li>
+                  <li>
+                    Develop rest API microservice with NestJS and PostgresSql
+                    database
+                  </li>
+                  <li>
+                    Develop with and utilizing other development tools, such as
+                    docker, git and rabbitmq{' '}
+                  </li>
+                </ul>
+                <p>Contributions:</p>
+                <ul>
+                  <li>
+                    Design and brainstorm application features and best
+                    practices
+                  </li>
+                  <li>Design and brainstorm git branching strategy</li>
+                  <li>Design and brainstorm payment application interface</li>
+                  <li>
+                    Develop react libraries and utilities for development
+                    purpose
+                  </li>
+                  <li>
+                    Develop NestJS libraries and utilities for development
+                    purpose
+                  </li>
+                  <li>Maintain code quality through reviewing pull requests</li>
+                </ul>
+                <p>Projects:</p>
+                <ul>
+                  <li>Backoffice rest api with NestJS</li>
+                  <li>Insurance promotion api with NestJS</li>
+                  <li>Backoffice frontend with react NextJS</li>
+                  <li>
+                    Backoffice scheduler with NestJS cron, and queue consumer
+                    with RabbitMq
+                  </li>
+                </ul>
+              </div>
+            }
           />
         </TimelineContent>
       </TimelineItem>
