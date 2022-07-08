@@ -23,21 +23,26 @@ const StyledAppBarContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 
-  & a:not(:last-child) {
-    margin-right: 32px;
+  @media (min-width: 600px) {
+    & a:not(:last-child) {
+      margin-right: 32px;
+    }
   }
 `;
 
 const StyledMotionA = styled(motion.a)`
   font-size: 1.2em;
   color: inherit;
+  flex-basis: 41%;
   text-decoration: none;
   text-shadow: 2px 2px 4px #000;
 
   @media (min-width: 900px) {
+    flex-basis: auto;
     font-size: 2em;
   }
   @media (min-width: 600px) and (max-width: 800px) {
+    flex-basis: auto;
     font-size: 1.4em;
   }
 `;
@@ -72,10 +77,10 @@ const A = (props: { href: string; children?: any }) => {
 export const AppBar = (props: AppBarProps) => {
   return (
     <StyledAppBarContainer>
-      <A href={'#introduction'}>Introduction</A>&nbsp;&nbsp;
-      <A href={'#skills'}>Skills</A>&nbsp;&nbsp;
-      <A href={'#work_experiences'}>Work Experiences</A>&nbsp;&nbsp;
-      <A href={'#projects'}>Projects</A>&nbsp;&nbsp;
+      <A href={'#introduction'}>Introduction</A>
+      <A href={'#skills'}>Skills</A>
+      <A href={'#work_experiences'}>Work Experiences</A>
+      <A href={'#projects'}>Projects</A>
       <A href={'#contact_me'}>Contact me</A>
     </StyledAppBarContainer>
   );

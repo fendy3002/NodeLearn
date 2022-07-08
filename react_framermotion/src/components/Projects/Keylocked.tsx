@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import { Lock } from '@mui/icons-material';
+import { Button } from '@mui/material';
+
 import { Keylock } from '@fendy3002/qz-react-keylock';
 import { motion } from 'framer-motion';
 
@@ -30,6 +33,22 @@ export const Keylocked = (props: { children: any }) => {
             },
           }}
         >
+          <div
+            style={{
+              marginTop: '10px',
+              marginBottom: '40px',
+            }}
+          >
+            <Button
+              onClick={() => {
+                setSelectedNumber('789');
+              }}
+              variant={'outlined'}
+              startIcon={<Lock></Lock>}
+            >
+              Lock again
+            </Button>
+          </div>
           {props.children}
         </motion.div>
       )}
