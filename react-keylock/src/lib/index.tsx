@@ -9,11 +9,13 @@ const offsetNumber = 2;
 export const KeylockNumber = (props: {
   position: number;
   number: number;
+  readonly: boolean;
   startMove: () => void;
   endMove: () => void;
   moveY: (deltaY: number) => void;
 }) => {
   const containerRef = useRef(null);
+
   useEffect(() => {
     if (containerRef.current) {
       const current = containerRef.current as any;
@@ -21,10 +23,11 @@ export const KeylockNumber = (props: {
       current.cursorY = 0;
 
       const mouseDownHandler = (evt: any) => {
-        console.log('MOUSEDOWN', props.position);
-        current.isGrabbing = true;
-        current.cursorY = evt.clientY;
-        props.startMove();
+        if (!props.readonly) {
+          current.isGrabbing = true;
+          current.cursorY = evt.clientY;
+          props.startMove();
+        }
       };
       current.addEventListener('mousedown', mouseDownHandler);
 
@@ -49,7 +52,7 @@ export const KeylockNumber = (props: {
         window.removeEventListener('mousemove', mouseMoveHandler);
       };
     }
-  }, [containerRef.current]);
+  }, [containerRef.current, props.readonly]);
   return (
     <div
       ref={containerRef}
@@ -74,6 +77,7 @@ export const KeylockNumber = (props: {
 };
 export const KeylockNumberSet = (props: {
   position: number;
+  readonly: boolean;
   initialNumber: number;
   onNumberChange: (number: number) => void;
 }) => {
@@ -89,6 +93,7 @@ export const KeylockNumberSet = (props: {
       (10 - offsetNumber + Math.abs(currentTop) / oneNumberHeight) % 10;
     if (currentlySelectedNumber - Math.floor(currentlySelectedNumber) > 0.5) {
       currentlySelectedNumber += 1;
+      currentlySelectedNumber = currentlySelectedNumber % 10;
     }
     currentlySelectedNumber = Math.floor(currentlySelectedNumber);
     current.style.top = `-${
@@ -133,6 +138,7 @@ export const KeylockNumberSet = (props: {
       >
         {number.map((n, i) => (
           <KeylockNumber
+            readonly={props.readonly}
             key={`${props.position}.${i}`}
             position={props.position}
             number={n}
@@ -145,19 +151,30 @@ export const KeylockNumberSet = (props: {
     </div>
   );
 };
-export const Keylock = () => {
-  const [stateNumber, setStateNumber] = useState('948175');
-  const handleNumberChange = (index: number) => (number: number) => {
-    setStateNumber((prev) => {
-      const newStateNumber = [
-        ...prev.split('').slice(0, index),
-        number.toString(),
-        ...prev.split('').slice(index + 1),
-      ].join('');
+export const Keylock = (props: {
+  initialNumber: string;
+  readonly: boolean;
+  onChange: (newNumber: string) => void;
+}) => {
+  const containerRef = useRef(null);
 
-      console.log(newStateNumber);
-      return newStateNumber;
-    });
+  useEffect(() => {
+    if (containerRef.current) {
+      (containerRef.current as any).selectedNumber = props.initialNumber;
+    }
+  }, [containerRef.current]);
+
+  const handleNumberChange = (index: number) => (number: number) => {
+    const current = containerRef.current as any;
+    const lastSelectedNumber = current.selectedNumber;
+    const newSelectedNumber = [
+      ...lastSelectedNumber.split('').slice(0, index),
+      number.toString(),
+      ...lastSelectedNumber.split('').slice(index + 1),
+    ].join('');
+
+    current.selectedNumber = newSelectedNumber;
+    props.onChange(newSelectedNumber);
   };
   return (
     <>
@@ -166,6 +183,7 @@ export const Keylock = () => {
           display: 'inline-block',
           border: '4px #E9E9E9 solid',
         }}
+        ref={containerRef}
       >
         <div
           style={{
@@ -178,11 +196,12 @@ export const Keylock = () => {
             position: 'relative',
           }}
         >
-          {[0, 1, 2, 3, 4, 5].map((i) => (
+          {props.initialNumber.split('').map((n, i) => (
             <KeylockNumberSet
+              readonly={props.readonly}
               key={i}
               position={i + 1}
-              initialNumber={parseInt(stateNumber[i])}
+              initialNumber={parseInt(n)}
               onNumberChange={handleNumberChange(i)}
             />
           ))}
