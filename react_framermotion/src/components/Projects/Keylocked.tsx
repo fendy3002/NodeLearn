@@ -8,7 +8,8 @@ import { motion } from 'framer-motion';
 
 export const Keylocked = (props: { children: any }) => {
   const [selectedNumber, setSelectedNumber] = useState('789');
-  const isUnlocked = selectedNumber == '777';
+  // debug to true
+  const isUnlocked = true; //selectedNumber == '777';
   return (
     <>
       <div style={{ fontSize: '1.2em', marginBottom: '20px' }}>

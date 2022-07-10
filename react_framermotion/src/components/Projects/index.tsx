@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 
 import { BEIGE_800, BG_COLOR_1 } from '../../constants/colors';
 import { Keylocked } from './Keylocked';
+import { QzReactKeylock } from './QzReactKeylock';
 
 export const Projects = (props: any) => {
   return (
@@ -42,11 +43,16 @@ export const Projects = (props: any) => {
                 paddingLeft: '0px',
                 paddingRight: '0px',
 
+                fontSize: '1.2em',
                 borderRadius: '20px',
                 width: '100%',
               }}
             >
-              <Keylocked>Unlocked</Keylocked>
+              <Keylocked>
+                <>
+                  <QzReactKeylock />
+                </>
+              </Keylocked>
             </div>
           </Box>
         </Box>

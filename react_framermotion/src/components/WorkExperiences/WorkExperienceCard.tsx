@@ -34,6 +34,7 @@ export const WorkExperienceCard = (props: {
               paddingRight: '16px',
               paddingLeft: '16px',
               paddingBottom: '16px',
+              fontSize: '1.2em',
             }}
           >
             <h3 style={{ marginTop: '0px', marginBottom: '4px' }}>
