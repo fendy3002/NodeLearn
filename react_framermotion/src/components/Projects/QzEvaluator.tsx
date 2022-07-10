@@ -4,14 +4,14 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { GithubSVG } from '../SVG/GithubSVG';
 
-export const QzCodeGenerator = () => {
+export const QzEvaluator = () => {
   return (
     <>
-      <h2>qz-code-generator</h2>
+      <h2>qz-evaluator</h2>
       <div style={{ marginBottom: '8px' }}>
         <GithubSVG size={24} />{' '}
         <a
-          href="https://github.com/fendy3002/qz-code-generator"
+          href="https://github.com/fendy3002/qz-evaluator"
           target={'_blank'}
           style={{
             display: 'inline-flex',
@@ -20,13 +20,21 @@ export const QzCodeGenerator = () => {
             justifyContent: 'center',
           }}
         >
-          https://github.com/fendy3002/qz-code-generator&nbsp;
+          https://github.com/fendy3002/qz-evaluator&nbsp;
           <OpenInNewIcon fontSize="small" />
         </a>
       </div>
       <div style={{ marginBottom: '16px' }}>
-        A code generator made using nodejs and nunjucks. It consist of template
-        files, and schema files (that direct how the template will render).
+        Utilizing{' '}
+        <a href="https://developers.google.com/blockly" target={'_blank'}>
+          Blockly
+        </a>{' '}
+        library to compose logic and evaluate given JSON values. A working
+        example can be found at:{' '}
+        <a href="https://fendy3002.github.io/qz-evaluator" target={'_blank'}>
+          https://fendy3002.github.io/qz-evaluator
+        </a>
+        .
       </div>
     </>
   );

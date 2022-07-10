@@ -14,7 +14,7 @@ export const QzPromise = () => {
           href="https://github.com/fendy3002/qz-promise"
           target={'_blank'}
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
             flexWrap: 'wrap',
             justifyContent: 'center',

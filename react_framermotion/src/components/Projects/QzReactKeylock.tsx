@@ -14,7 +14,7 @@ export const QzReactKeylock = () => {
           href="https://github.com/fendy3002/qz-react-keylock"
           target={'_blank'}
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
             flexWrap: 'wrap',
             justifyContent: 'center',
