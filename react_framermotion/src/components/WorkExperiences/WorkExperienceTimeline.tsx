@@ -77,6 +77,32 @@ export const WorkExperienceTimeline = () => {
             company="PT. Anadana Kode Nontunai"
             location="Jakarta, Indonesia"
             when="Oct 2019 - Mar 2022"
+            detail={
+              <div>
+                <p>Responsibilities:</p>
+                <ul>
+                  <li>
+                    Develop and maintain e-wallet bank connection and automated
+                    transaction simulator
+                  </li>
+                  <li>Develop e-wallet back-office administration tools</li>
+                  <li>
+                    Develop and maintain other in-house projects, such as POS
+                    API and project management
+                  </li>
+                </ul>
+
+                <p>Projects:</p>
+                <ul>
+                  <li>Back office administration application for e-wallet</li>
+                  <li>Automated transaction simulator</li>
+                  <li>
+                    Other in-house applications such as POS API and project
+                    management
+                  </li>
+                </ul>
+              </div>
+            }
           />
         </TimelineContent>
       </TimelineItem>
@@ -90,6 +116,38 @@ export const WorkExperienceTimeline = () => {
             company="PT. Panorama Langit Teknologi"
             location="Jakarta, Indonesia"
             when="Dec 2015 - Oct 2019"
+            detail={
+              <div>
+                <p>Responsibility:</p>
+                <ul>
+                  <li>
+                    Develop backend api usable and suitable for front-end needs
+                  </li>
+                  <li>Develop application suitable for corporate needs</li>
+                  <li>
+                    Manage, coach and assign tasks to a team of 3 other
+                    programmers
+                  </li>
+                  <li>Sharing knowledge with other developers</li>
+                </ul>
+
+                <p>Projects:</p>
+                <ul>
+                  <li>
+                    Content Service as Senior Developer - develop system to
+                    manage contents for hotels
+                  </li>
+                  <li>
+                    Lalalaway.com as Senior Developer - develop frontend and
+                    backend modules{' '}
+                  </li>
+                  <li>
+                    Corporate Room Deal as Team Leader - develop and manage team
+                    for backend api in microservice architectureResponsibility
+                  </li>
+                </ul>
+              </div>
+            }
           />
         </TimelineContent>
       </TimelineItem>
@@ -103,6 +161,19 @@ export const WorkExperienceTimeline = () => {
             company="PT. Bach Multi Global"
             location="Jakarta, Indonesia"
             when="Jan 2014 - Sep 2015"
+            detail={
+              <div>
+                <p>Responsibility:</p>
+                <ul>
+                  <li>Establish development version control</li>
+                  <li>Establish database version control</li>
+                  <li>Establish publishing flow</li>
+                  <li>Develop integrated framework</li>
+                  <li>Develop integrated workflow</li>
+                  <li>Develop 3 tier web application</li>
+                </ul>
+              </div>
+            }
           />
         </TimelineContent>
       </TimelineItem>
@@ -115,6 +186,40 @@ export const WorkExperienceTimeline = () => {
             company="PT. Kuala Kamoro"
             location="Jakarta, Indonesia"
             when="Jun 2012 - Feb 2014"
+            detail={
+              <div>
+                <p>Responsibility:</p>
+                <ul>
+                  <li>bug fix</li>
+                  <li>enhance features</li>
+                  <li>maintain application architecture</li>
+                  <li>maintain application interaction with other system</li>
+                  <li>
+                    analyze and prevent possible system error during functional
+                    design
+                  </li>
+                  <li>optimize database and application performance</li>
+                </ul>
+
+                <p>Application:</p>
+                <ul>
+                  <li>
+                    Material Requisition
+                    <br />
+                    An application used for material requisition. Has medium
+                    transaction volume. Has high interaction with other
+                    in-corporate system such as SAP and ETL
+                  </li>
+                  <li>
+                    Issue Tracking System Dashboard
+                    <br />
+                    An application used to view summary of tickets handled by
+                    ITS. Has interactive UI elements with multi browser support
+                    and complex database query.
+                  </li>
+                </ul>
+              </div>
+            }
           />
         </TimelineContent>
       </TimelineItem>
