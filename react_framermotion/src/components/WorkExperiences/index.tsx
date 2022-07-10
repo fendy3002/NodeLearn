@@ -26,6 +26,8 @@ export const WorkExperiences = (props: any) => {
           <Box
             sx={{
               width: '80%',
+              paddingLeft: '32px',
+              paddingRight: '32px',
               display: 'block',
               textAlign: 'center',
             }}
