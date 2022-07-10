@@ -7,6 +7,7 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
+  Grid,
 } from '@mui/material';
 
 import { motion } from 'framer-motion';
@@ -40,14 +41,15 @@ export const WorkExperienceCard = (props: {
             <h3 style={{ marginTop: '0px', marginBottom: '4px' }}>
               {props.company}
             </h3>
-            <div
-              style={{
-                display: 'flex',
-              }}
-            >
-              {props.location}
-              <small style={{ marginLeft: 'auto' }}>{props.when}</small>
-            </div>
+            <Grid container>
+              <Grid item xs={12} sm={6}>
+                {props.location}
+              </Grid>
+              <Grid item xs={12} sm={6} style={{ textAlign: 'right' }}>
+                <small>{props.when}</small>
+              </Grid>
+            </Grid>
+
             {expanded && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {props.detail}

@@ -8,7 +8,7 @@ import { BREAKPOINT_SM } from '../../constants/positions';
 
 const StyledList = styled(List)`
   display: flex;
-  flex-wrap: wrap';
+  flex-wrap: wrap;
   & li {
     flex-basis: 100%;
   }
