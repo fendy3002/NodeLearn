@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 
 import { motion } from 'framer-motion';
 
 import { BEIGE_800, BG_COLOR_1 } from '../../constants/colors';
 import { Keylocked } from './Keylocked';
+import { QzCodeGenerator } from './QzCodeGenerator';
+import { QzPromise } from './QzPromise';
 import { QzReactKeylock } from './QzReactKeylock';
 
 export const Projects = (props: any) => {
@@ -49,9 +51,13 @@ export const Projects = (props: any) => {
               }}
             >
               <Keylocked>
-                <>
+                <div style={{ paddingLeft: '32px', paddingRight: '32px' }}>
                   <QzReactKeylock />
-                </>
+                  <Divider />
+                  <QzPromise />
+                  <Divider />
+                  <QzCodeGenerator />
+                </div>
               </Keylocked>
             </div>
           </Box>
