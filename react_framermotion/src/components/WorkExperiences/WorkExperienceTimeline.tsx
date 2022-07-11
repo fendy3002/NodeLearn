@@ -1,22 +1,22 @@
-import { CircleOutlined, CircleTwoTone } from '@mui/icons-material';
+import React, { useContext } from 'react';
+
+import { CircleTwoTone } from '@mui/icons-material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { maxWidth } from '@mui/system';
-
-import { useWindowWidth } from '@react-hook/window-size';
 
 import { BREAKPOINT_SM } from '../../constants/positions';
+import { AppContext } from '../AppContextProvider';
 import { WorkExperienceCard } from './WorkExperienceCard';
 
 export const WorkExperienceTimeline = () => {
-  const windowWidth = useWindowWidth();
-
+  const { windowWidth } = useContext(AppContext);
   const WorkExperienceCards = [
     <WorkExperienceCard
+      key={'0'}
       company="FWD Insurance"
       location="Singapore office (remote from Indonesia)"
       when="Mar 2022 - Jul 2022"
@@ -62,6 +62,7 @@ export const WorkExperienceTimeline = () => {
       }
     />,
     <WorkExperienceCard
+      key={'1'}
       company="PT. Anadana Kode Nontunai"
       location="Jakarta, Indonesia"
       when="Oct 2019 - Mar 2022"
@@ -92,6 +93,7 @@ export const WorkExperienceTimeline = () => {
       }
     />,
     <WorkExperienceCard
+      key={'2'}
       company="PT. Panorama Langit Teknologi"
       location="Jakarta, Indonesia"
       when="Dec 2015 - Oct 2019"
@@ -126,6 +128,7 @@ export const WorkExperienceTimeline = () => {
       }
     />,
     <WorkExperienceCard
+      key={'3'}
       company="PT. Bach Multi Global"
       location="Jakarta, Indonesia"
       when="Jan 2014 - Sep 2015"
@@ -144,6 +147,7 @@ export const WorkExperienceTimeline = () => {
       }
     />,
     <WorkExperienceCard
+      key={'4'}
       company="PT. Kuala Kamoro"
       location="Jakarta, Indonesia"
       when="Jun 2012 - Feb 2014"
@@ -188,11 +192,12 @@ export const WorkExperienceTimeline = () => {
       <div style={{ paddingLeft: '16px', paddingRight: '16px' }}>
         {experienceCards.map((card: any, index) => {
           return (
-            <>
+            <React.Fragment key={index}>
               {card}
               {index < experienceCards.length - 1 && (
                 <>
                   <div
+                    key={index}
                     style={{
                       display: 'block',
                       height: '16px',
@@ -228,7 +233,7 @@ export const WorkExperienceTimeline = () => {
                   </div>
                 </>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
@@ -239,7 +244,7 @@ export const WorkExperienceTimeline = () => {
       <Timeline position="alternate">
         {experienceCards.map((card: any, index: number) => {
           return (
-            <TimelineItem>
+            <TimelineItem key={index}>
               <TimelineSeparator>
                 <TimelineDot />
                 {index < experienceCards.length - 1 && <TimelineConnector />}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import './App.css';
 import { AppBar } from './components/AppBar';
+import { AppContextProvider } from './components/AppContextProvider';
 import { ContactMe } from './components/ContactMe';
 import { Introduction } from './components/Introduction';
 import { Projects } from './components/Projects';
@@ -16,76 +17,27 @@ function App() {
   });
   return (
     <>
-      <div style={{ color: FONT_COLOR_1, fontFamily: 'Lato, Arial' }}>
-        <SideBar
-          open={appState.sideBarOpen}
-          openSideBar={() =>
-            setAppState((prev) => ({ ...prev, sideBarOpen: true }))
-          }
-          closeSideBar={() =>
-            setAppState((prev) => ({ ...prev, sideBarOpen: false }))
-          }
-        />
-        <AppBar />
-        <Introduction />
-        <Skills />
-        <WorkExperiences />
-        <Projects />
-        <ContactMe />
-      </div>
+      <AppContextProvider>
+        <div style={{ color: FONT_COLOR_1, fontFamily: 'Lato, Arial' }}>
+          <SideBar
+            open={appState.sideBarOpen}
+            openSideBar={() =>
+              setAppState((prev) => ({ ...prev, sideBarOpen: true }))
+            }
+            closeSideBar={() =>
+              setAppState((prev) => ({ ...prev, sideBarOpen: false }))
+            }
+          />
+          <AppBar />
+          <Introduction />
+          <Skills />
+          <WorkExperiences />
+          <Projects />
+          <ContactMe />
+        </div>
 
-      <div style={{ marginTop: '400px' }}></div>
-      {/* 
-      <Box sx={{ display: 'flex' }}>
-        <Box sx={{ width: '100%' }}>
-          <Card>
-            <CardContent
-              component={motion.div}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              sx={{ height: '40vh' }}
-              viewport={{ once: true }}
-            >
-              <Button>Submit</Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent
-              component={motion.div}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              sx={{ height: '40vh' }}
-              viewport={{ once: true }}
-            >
-              <Button>Submit</Button>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent
-              component={motion.div}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              sx={{ height: '40vh' }}
-              viewport={{ once: true }}
-            >
-              <Button>Submit</Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent
-              component={motion.div}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              sx={{ height: '40vh' }}
-              viewport={{ once: true }}
-            >
-              <Button>Submit</Button>
-            </CardContent>
-          </Card>
-        </Box>
-      </Box> */}
+        <div style={{ marginTop: '280px' }}></div>
+      </AppContextProvider>
     </>
   );
 }

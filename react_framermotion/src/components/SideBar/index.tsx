@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import {
   Box,
@@ -15,6 +15,7 @@ import { SideBarProps } from '_/types/props/SideBarProps';
 
 import { FONT_COLOR_1 } from '../../constants/colors';
 import { MENU_CUTOFF_Y } from '../../constants/positions';
+import { AppContext } from '../AppContextProvider';
 
 const Path = (props: any) => (
   <motion.path
@@ -25,6 +26,34 @@ const Path = (props: any) => (
     {...props}
   />
 );
+
+export const SideBarMenu = () => {
+  const { selectedMenuId } = useContext(AppContext);
+  const menuList = [
+    ['introduction', 'INTRODUCTION'],
+    ['skills', 'SKILLS'],
+    ['work_experiences', 'WORK EXPERIENCES'],
+    ['projects', 'PROJECTS'],
+    ['contact_me', 'CONTACT ME'],
+  ];
+  return (
+    <Box>
+      {menuList.map(([id, label]) => {
+        return (
+          <ListItem key={id}>
+            <ListItemButton
+              selected={selectedMenuId == id}
+              component={Link}
+              href={`#${id}`}
+            >
+              {label}
+            </ListItemButton>
+          </ListItem>
+        );
+      })}
+    </Box>
+  );
+};
 
 export const SideBar = (props: SideBarProps) => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -163,33 +192,7 @@ export const SideBar = (props: SideBarProps) => {
               </h1>
             </div>
             <Divider />
-            <Box>
-              <ListItem>
-                <ListItemButton component={Link} href="#introduction">
-                  INTRODUCTION
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton component={Link} href="#skills">
-                  SKILLS
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton component={Link} href="#work_experiences">
-                  WORK EXPERIENCES
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton component={Link} href="#projects">
-                  PROJECTS
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton component={Link} href="#contact_me">
-                  CONTACT ME
-                </ListItemButton>
-              </ListItem>
-            </Box>
+            <SideBarMenu />
           </motion.div>
         </motion.nav>
       </motion.div>
