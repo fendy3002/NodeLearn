@@ -15,7 +15,7 @@ const getMenuId = (
   posY: number,
   menuPoints: { id: string; posY: number }[],
 ) => {
-  if (menuPoints.length == 0) {
+  if (menuPoints.length == 1) {
     return '';
   }
   for (const menuPoint of menuPoints) {
