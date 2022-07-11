@@ -27,24 +27,42 @@ const getMenuId = (
 };
 
 export const AppContextProvider = (props: any) => {
-  const [menuPoints, setMenuPoints] = useState<{ id: string; posY: number }[]>(
-    [],
-  );
+  const [menuPoints, setMenuPoints] = useState<{ id: string; posY: number }[]>([
+    { id: '_', posY: 0 },
+  ]);
   const [width, height] = useWindowSize();
   const [scrollY, setScrollY] = useState<number>(0);
 
   const scrollFps = 30;
   useEffect(() => {
-    window.addEventListener('scroll', () => {
+    const scrollEventHandler = () => {
       if (!(window as any).___scrollTimeoutId) {
         (window as any).___scrollTimeoutId = setTimeout(() => {
           setScrollY(window.scrollY);
           (window as any).___scrollTimeoutId = null;
+          const selectedMenuId = getMenuId(window.scrollY, menuPoints);
+          if (selectedMenuId && selectedMenuId != '_') {
+            history.replaceState(
+              undefined,
+              undefined as any as string,
+              `#${selectedMenuId}`,
+            );
+          } else if (selectedMenuId == '_') {
+            history.pushState(
+              '',
+              document.title,
+              window.location.pathname + window.location.search,
+            );
+          }
         }, 1000 / scrollFps);
       }
-    });
+    };
+    window.addEventListener('scroll', scrollEventHandler);
     setScrollY(window.scrollY);
-  }, []);
+    return () => {
+      window.removeEventListener('scroll', scrollEventHandler);
+    };
+  }, [menuPoints]);
 
   return (
     <AppContext.Provider

@@ -51,13 +51,27 @@ export const Skills = (props: SkillsProps) => {
             skillName="Node JS"
             skillDescription={
               <TextPopover>
-                with Typescript
+                I have major experience with Typescript when using NodeJS.
                 <br />
-                using ExpressJS and also NestJS
+                As or the backend framework, I was using ExpressJS and also
+                NestJS.
               </TextPopover>
             }
           />
-          <SkillPoints points={8} skillName="React JS" />
+          <SkillPoints
+            points={8}
+            skillName="React JS"
+            skillDescription={
+              <TextPopover>
+                <p>
+                  I was starting to use React with class-based components.
+                  <br />
+                  Lately I've been using functional components and hooks more.
+                </p>
+                <p>In our recent project, we are using NextJS as well.</p>
+              </TextPopover>
+            }
+          />
           <SkillPoints points={7} skillName="PHP" />
           <SkillPoints points={7} skillName="C#" />
           <SkillPoints
@@ -65,8 +79,15 @@ export const Skills = (props: SkillsProps) => {
             skillName="SQL"
             skillDescription={
               <TextPopover>
-                MySQL, MsSQL, PostgreSQL <br />
-                and NoSQL (MongoDB)
+                <p>
+                  For SQL, I have experiences with MySQL, MsSQL and PostgreSQL.
+                  <br />I also have experience with MongoDB (NoSQL).
+                </p>
+                <p>
+                  With SQL, I have decent experience with query performance
+                  (also indexing), fluent with aggregate queries and data
+                  migration.
+                </p>
               </TextPopover>
             }
           />
