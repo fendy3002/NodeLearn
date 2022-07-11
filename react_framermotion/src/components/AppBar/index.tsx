@@ -32,7 +32,7 @@ const StyledAppBarContainer = styled.div`
 `;
 
 const StyledMotionA = styled(motion.a)`
-  font-size: 1.2em;
+  font-size: 1.4em;
   color: inherit;
   flex-basis: 41%;
   text-decoration: none;
@@ -40,11 +40,9 @@ const StyledMotionA = styled(motion.a)`
 
   @media (min-width: ${BREAKPOINT_MD}px) {
     flex-basis: auto;
-    font-size: 2em;
   }
   @media (min-width: ${BREAKPOINT_SM}px) and (max-width: ${BREAKPOINT_MD}px) {
     flex-basis: auto;
-    font-size: 1.4em;
   }
 `;
 
