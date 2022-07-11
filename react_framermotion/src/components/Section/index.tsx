@@ -9,12 +9,10 @@ import { SectionProps } from '_/types/props/SectionProps';
 import { BEIGE_800, BG_COLOR_1 } from '../../constants/colors';
 import { AppContext } from '../AppContextProvider';
 
-function getOffset(el: any) {
-  const rect = el.getBoundingClientRect();
-  return {
-    left: rect.left + window.scrollX,
-    top: rect.top + window.scrollY,
-  };
+function getOffsetTop(el: any) {
+  const bodyRect = document.body.getBoundingClientRect();
+  const elemRect = el.getBoundingClientRect();
+  return elemRect.top - bodyRect.top;
 }
 
 export const Section = (props: SectionProps) => {
@@ -22,9 +20,13 @@ export const Section = (props: SectionProps) => {
   const menuTitleRef = useRef(null);
   useEffect(() => {
     if (menuTitleRef.current) {
-      addMenuPoints(props.id, getOffset(menuTitleRef.current).top);
+      addMenuPoints(
+        props.id,
+        getOffsetTop(menuTitleRef.current) -
+          (menuTitleRef.current as any).offsetHeight,
+      );
     }
-  }, [menuTitleRef.current]);
+  }, [props.id, menuTitleRef.current]);
   return (
     <>
       <motion.div

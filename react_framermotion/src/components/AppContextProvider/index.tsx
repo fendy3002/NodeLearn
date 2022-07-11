@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import useScrollPosition from '@react-hook/window-scroll';
 import { useWindowSize } from '@react-hook/window-size';
 
 export interface AppContextProps {
@@ -20,7 +19,7 @@ const getMenuId = (
     return '';
   }
   for (const menuPoint of menuPoints) {
-    if (menuPoint.posY < posY) {
+    if (menuPoint.posY <= posY) {
       return menuPoint.id;
     }
   }
@@ -32,7 +31,20 @@ export const AppContextProvider = (props: any) => {
     [],
   );
   const [width, height] = useWindowSize();
-  const scrollY = useScrollPosition();
+  const [scrollY, setScrollY] = useState<number>(0);
+
+  const scrollFps = 30;
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (!(window as any).___scrollTimeoutId) {
+        (window as any).___scrollTimeoutId = setTimeout(() => {
+          setScrollY(window.scrollY);
+          (window as any).___scrollTimeoutId = null;
+        }, 1000 / scrollFps);
+      }
+    });
+    setScrollY(window.scrollY);
+  }, []);
 
   return (
     <AppContext.Provider
@@ -42,8 +54,10 @@ export const AppContextProvider = (props: any) => {
         scrollY: scrollY,
         selectedMenuId: getMenuId(scrollY, menuPoints),
         addMenuPoints: (menuId: string, posY: number) => {
-          const newMenuPoints = [...menuPoints, { id: menuId, posY: posY }];
-          setMenuPoints(newMenuPoints.sort((k, l) => l.posY - k.posY));
+          setMenuPoints((prev) => {
+            const newMenuPoints = [...prev, { id: menuId, posY: posY }];
+            return newMenuPoints.sort((k, l) => l.posY - k.posY);
+          });
         },
       }}
     >
