@@ -7,24 +7,16 @@ import { motion } from 'framer-motion';
 import { SectionProps } from '_/types/props/SectionProps';
 
 import { BEIGE_800, BG_COLOR_1 } from '../../constants/colors';
+import { ROLE_SECTION_ANCHOR } from '../../constants/roles';
+import { getMenuPoint } from '../../elemUtils/getMenuPoint';
 import { AppContext } from '../AppContextProvider';
-
-function getOffsetTop(el: any) {
-  const bodyRect = document.body.getBoundingClientRect();
-  const elemRect = el.getBoundingClientRect();
-  return elemRect.top - bodyRect.top;
-}
 
 export const Section = (props: SectionProps) => {
   const { addMenuPoints } = useContext(AppContext);
   const menuTitleRef = useRef(null);
   useEffect(() => {
     if (menuTitleRef.current) {
-      addMenuPoints(
-        props.id,
-        getOffsetTop(menuTitleRef.current) -
-          (menuTitleRef.current as any).offsetHeight,
-      );
+      addMenuPoints(props.id, getMenuPoint(menuTitleRef.current));
     }
   }, [props.id, menuTitleRef.current]);
   return (
@@ -49,7 +41,7 @@ export const Section = (props: SectionProps) => {
               textAlign: 'center',
             }}
           >
-            <a id={props.id} ref={menuTitleRef}>
+            <a id={props.id} ref={menuTitleRef} data-role={ROLE_SECTION_ANCHOR}>
               <h1>{props.title}</h1>
             </a>
             <div

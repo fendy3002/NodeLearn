@@ -121,7 +121,7 @@ export const WorkExperienceTimeline = () => {
             </li>
             <li>
               Corporate Room Deal as Team Leader - develop and manage team for
-              backend api in microservice architectureResponsibility
+              backend api in microservice architecture
             </li>
           </ul>
         </div>

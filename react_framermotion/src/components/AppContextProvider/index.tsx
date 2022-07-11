@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { useWindowSize } from '@react-hook/window-size';
 
+import { ROLE_SECTION_ANCHOR } from '../../constants/roles';
+import { getMenuPoint } from '../../elemUtils/getMenuPoint';
+
 export interface AppContextProps {
   scrollY: number;
   windowWidth: number;
@@ -33,7 +36,7 @@ export const AppContextProvider = (props: any) => {
   const [width, height] = useWindowSize();
   const [scrollY, setScrollY] = useState<number>(0);
 
-  const scrollFps = 30;
+  const scrollFps = 12;
   useEffect(() => {
     const scrollEventHandler = () => {
       if (!(window as any).___scrollTimeoutId) {
@@ -59,8 +62,32 @@ export const AppContextProvider = (props: any) => {
     };
     window.addEventListener('scroll', scrollEventHandler);
     setScrollY(window.scrollY);
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!(window as any).___resizeObserverId) {
+        (window as any).___resizeObserverId = setTimeout(() => {
+          const sectionAnchors = document.querySelectorAll(
+            `[data-role="${ROLE_SECTION_ANCHOR}"]`,
+          );
+          let newMenuPoints = [{ id: '_', posY: 0 }];
+          sectionAnchors.forEach((a) => {
+            newMenuPoints.push({
+              id: a.id,
+              posY: getMenuPoint(a),
+            });
+          }),
+            (newMenuPoints = newMenuPoints.sort((k, l) => l.posY - k.posY));
+          setMenuPoints(newMenuPoints);
+          (window as any).___resizeObserverId = null;
+        }, 1000 / scrollFps);
+      }
+    });
+    // start observing a DOM node
+    resizeObserver.observe(document.body);
+
     return () => {
       window.removeEventListener('scroll', scrollEventHandler);
+      resizeObserver.disconnect();
     };
   }, [menuPoints]);
 
