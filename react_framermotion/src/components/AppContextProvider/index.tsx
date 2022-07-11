@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import useScrollPosition from '@react-hook/window-scroll';
 import { useWindowSize } from '@react-hook/window-size';
@@ -24,11 +24,13 @@ const getMenuId = (
       return menuPoint.id;
     }
   }
-  return menuPoints[menuPoints.length].id;
+  return menuPoints[menuPoints.length - 1].id;
 };
 
 export const AppContextProvider = (props: any) => {
-  let menuPoints: { id: string; posY: number }[] = [];
+  const [menuPoints, setMenuPoints] = useState<{ id: string; posY: number }[]>(
+    [],
+  );
   const [width, height] = useWindowSize();
   const scrollY = useScrollPosition();
 
@@ -40,8 +42,8 @@ export const AppContextProvider = (props: any) => {
         scrollY: scrollY,
         selectedMenuId: getMenuId(scrollY, menuPoints),
         addMenuPoints: (menuId: string, posY: number) => {
-          menuPoints.push({ id: menuId, posY: posY });
-          menuPoints = menuPoints.sort((k, l) => l.posY - k.posY);
+          const newMenuPoints = [...menuPoints, { id: menuId, posY: posY }];
+          setMenuPoints(newMenuPoints.sort((k, l) => l.posY - k.posY));
         },
       }}
     >
